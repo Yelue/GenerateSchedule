@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
+{% endblock %}
+{% block name_schedule %}
+    <div class="navbar-brand">
+        <span id="logo-font">
+            {{ sch_data['name'] }}
+        </span>
+    </div>
+
+{% endblock %}
+{%block content%}
+    <div id="schedule" class="container-fluid bg-light  ">
+            <div class="row text-center" >
+                <div class="col-lg col-0 border "> Вр </div>
+                <div class="col-lg col-2-cust border "> ПН </div>
+                <div class="col-lg col-2-cust border "> ВТ </div>
+                <div class="col-lg col-2-cust border "> СР </div>
+                <div class="col-lg col-2-cust border "> ЧТ </div>
+                <div class="col-lg col-2-cust border "> ПТ </div>
+                <div class="col-lg col-2-cust border "> СБ </div>
+            </div>
+            <div class="row" >
+                <div class="col-lg col-0 border text-center align-middle"> 1 </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-lg col-0 border text-center align-middle"> 1 </div>
+                <div class="col-lg col-2-cust border lesson">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="Математичний Аналіз - 1">
+                                    <h5>МА-1</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="Чертов Олег Романович">Чертов О.Р.</div>
+                            </div>
+                            <div class="row">
+                                <div class="col border-bottom">лекція</div>
+                            </div>
+                            <div class="row">
+                                <div class="col">15-97</div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-lg col-0 border text-center align-middle"> 1 </div>
+                <div class="col-lg col-2-cust border lesson">
+
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-lg col-0 border text-center align-middle"> 1 </div>
+                <div class="col-lg col-2-cust border lesson">
+
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-lg col-0 border text-center align-middle"> 1 </div>
+                <div class="col-lg col-2-cust border lesson">
+
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="Нелінійний Аналіз - 1">
+                                    <h5>НА-1</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="Незнаю Хер Знає">Незнаю Х.З.</div>
+                            </div>
+                            <div class="row">
+                                <div class="col border-bottom">Лекція</div>
+                            </div>
+                            <div class="row">
+                                <div class="col">14-72</div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+                <div class="col-lg col-2-cust border lesson">
+                </div>
+            </div>
+
+            <br/><br/>
+            <div class="text-center">
+                <p>
+                    All rights reserved otsosi (c)Confucius<br/>2020
+                </p>
+            </div>
+
+    </div>
+
+{%endblock%}
+{% block scripts%}
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+{% endblock %}

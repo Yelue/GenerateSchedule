@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block head %}
+	<link rel="stylesheet" href="/static/css/style_test.css" type="text/css" media="screen" />
+{% endblock %}
+{%block content%}
+	<div class="container" id="main">
+		<div id="drag" class="container-fluid">
+			<div class="row justify-content-md-center">
+				<div class="col col-auto">
+					<table>
+						<tr style="height:30px;">
+							<td class="marke">пн</td>
+							<td class="marke">вт</td>
+							<td class="marke">ср</td>
+							<td class="marke">чт</td>
+							<td class="marke">пт</td>
+						</tr>
+						<tr style="background-color: #eee">
+							<td>
+								<div id="matan" class="card drag">
+									<div class="card-body">
+										This is matan.
+									</div>
+								</div>
+							</td>
+							<td>
+								<div id="fizra" class="card drag">
+									<div class="card-body">
+										This is FIZRA.
+									</div>
+								</div>
+							</td>
+							<td>
+								<div id="fizra" class="card drag">
+									<div class="card-body">
+										This is FIZRA.
+									</div>
+								</div>
+							</td>
+							<td>
+								<div id="fizra" class="card drag">
+									<div class="card-body">
+										This is FIZRA.
+									</div>
+								</div>
+							</td>
+							<td>
+								<div id="linal" class="card drag">
+									<div class="card-body">
+										This is linal.
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr style="background-color: #eee">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr style="background-color: #eee">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr style="background-color: #eee">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr style="background-color: #eee">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div class="text-center">
+			<br/>
+			<p id="message">none</p>
+			<input type="button" value="Save" class="button" onclick="save()" title="Send content to the server"/><span class="message_line">Save content of the first table (it will only show accepted parameters)</span> <br/>
+			<input type="checkbox" class="checkbox" onclick="toggle_dragging(this)" title="Enable dragging" checked="true"/><span class="message_line">Enable dragging</span>
+
+		</div>
+	</div>
+
+{%endblock%}
+{% block scripts%}
+	<script type="text/javascript" src="/static/js/drag.js"></script>
+	<script type="text/javascript" src="/static/js/funcs.js"></script>
+{% endblock %}
