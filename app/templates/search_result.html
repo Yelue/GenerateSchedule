@@ -1,0 +1,46 @@
+{%extends "base.html"%}
+
+{% block content%}
+<div class="container" id="main">
+    <div class="container">
+
+        <!-- text  -->
+        <div>
+            <h1>Search results for "{{search_value}}"</h1>
+            <hr>
+            <br/>
+            <div class="alert alert-warning" role="alert">
+                 Ne rabotaet, sori
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h3>Scheldue_Example_ebu_web</h3>
+                        </div>
+                        <div class="col text-right">
+                            <a href="/schedule_id_0" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+
+              </div>
+            </div>
+            {{s_v}}
+        </div>
+
+
+
+
+        <hr>
+        <!-- Footer -->
+        <div class="text-center">
+            <p>
+                All rights reserved otsosi (c)Confucius<br/>2020
+            </p>
+        </div>
+
+    </div>
+</div>
+{%endblock%}

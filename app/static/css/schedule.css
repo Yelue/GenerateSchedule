@@ -1,0 +1,32 @@
+html{
+    background-color: #f8f9fa;
+}
+.col-lg{
+    padding: 3px;
+}
+
+.card{
+    background-color:#A389C2;
+    color: white;
+}
+
+.col-0 {
+    -ms-flex: 0 0 4.166666%;
+    flex: 0 0 4.166666%;
+    max-width: 4.166666%;
+}
+
+.col-2-cust{
+    -ms-flex: 0 0 15.972222%;
+    flex: 0 0 15.972222%;
+    max-width: 15.972222%;
+}
+
+#schedule{
+    heightL 100vh;
+    background-color: white;
+}
+
+.lesson{
+    min-height: 157px;
+}

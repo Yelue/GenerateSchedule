@@ -1,0 +1,20 @@
+body{
+    background-color: #a1a1a1;
+}
+
+#logo-font{
+    font-size: 2em;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#main{
+    background-color: #fff;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+#lesson{
+    min-height:157px;
+}
