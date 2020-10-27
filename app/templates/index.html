@@ -5,81 +5,171 @@
 
         <!-- text  -->
         <div>
-            <h1>Welcome to the myScheldue</h1>
+            <h1>Ласкаво просимо до myScheldue!</h1>
             <hr>
-            <br/>
+
             <h5>
-                If You want to find a specific schedule - just type its name into a Search
-                field an press Search. It is located in the top right corner of Your screen.
+                Якщо Ви шукаєте вже існуючий розклад - просто напишіть його
+                назву в полі пошуку та натисніть "Шукати".
+
             </h5>
             <br/>
             <h5>
-                If You want to create a request for a schedule for Your University, Faculty or Group
-                simply fill out the form below.
+                Якщо Ви бажаєте створити новий розклад для Вашої кафедри -
+                заповніть, будь ласка, форму нижче.
             </h5>
             <div class="alert alert-warning" role="alert">
-                 Make sure You have read and met all of requirements for a input data!<br/>
-                 If something goes wrong, a letter with a decsription of the problem will be sent
-                 to a specified email.
+                 Перед підтвердженням переконайтесь, що всі вимоги до даних були
+                 виконані!<br/>
+                 У випадку, коли присутні певні проблеми з даними - Вам буде
+                 надісланий лист з інформацією щодо помилок.
             </div>
             <br/>
-            <hr>
-            <h5>
-                OBOSSANIE RULES
-                <ul>
-                  <li>Файл "Teachers": </li>
-                  <li>TO EST O4EN` KRASIVO TAM STOLBIKI VSYAKIE</li>
-                  <li>NU CHTOBU VAS NE POSLALI</li>
-                </ul>
-            </h5>
         </div>
-
         <hr>
+        <form class="font-weight-bold" action='/upload' method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Ваша елекронна адреса</label>
+                    {{new_schedule_form.email(class="form-control",
+                                              type="email",
+                                              placeholder="Ввести адресу")}}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputName">Ваше ім'я</label>
+                    {{new_schedule_form.name(class="form-control",
+                                             placeholder="Ввести ім'я")}}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="customFile">Викладачі</label>
+                    <div class="custom-file">
+                        {{
+                            new_schedule_form.teachers(
+                                    class="custom-file-input",
+                                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                )
+                        }}
+                        <label class="custom-file-label"
+                            for="customFile">Обрати файл</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="customFile">Предмети</label>
+                    <div class="custom-file">
+                        {{
+                            new_schedule_form.subjects(
+                                    class="custom-file-input",
+                                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                )
+                        }}
+                        <label class="custom-file-label" for="customFile">
+                            Обрати файл
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="customFile">Групи</label>
+                    <div class="custom-file">
+                        {{
+                            new_schedule_form.groups(
+                                    class="custom-file-input",
+                                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                )
+                        }}
+                        <label class="custom-file-label"
+                            for="customFile">Обрати файл</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="customFile">Факультет</label>
+                    <div class="custom-file">
+                        {{
+                            new_schedule_form.faculty(
+                                    class="custom-file-input",
+                                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                )
+                        }}
+                        <label class="custom-file-label" for="customFile">
+                            Обрати файл
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="customFile">Кафедри</label>
+                    <div class="custom-file">
+                        {{
+                            new_schedule_form.departments(
+                                    class="custom-file-input",
+                                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                )
+                        }}
+                        <label class="custom-file-label"
+                            for="customFile">Обрати файл</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="customFile">Лист навантаження</label>
+                    <div class="custom-file">
+                        {{
+                            new_schedule_form.load_list(
+                                    class="custom-file-input",
+                                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                )
+                        }}
+                        <label class="custom-file-label" for="customFile">
+                            Обрати файл
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="customFile">Електронні абреси викладачів</label>
+                    <div class="custom-file">
+                        {{
+                            new_schedule_form.teacher_emails(
+                                    class="custom-file-input",
+                                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                )
+                        }}
+                        <label class="custom-file-label"
+                            for="customFile">Обрати файл</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="customFile">Електронні адреси студентів</label>
+                    <div class="custom-file">
+                        {{
+                            new_schedule_form.student_emails(
+                                    class="custom-file-input",
+                                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                )
+                        }}
+                        <label class="custom-file-label" for="customFile">
+                            Обрати файл
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right">
+                {{
+                    new_schedule_form.submit(class="btn btn-primary")
+                }}
+            </div>
 
-        <form>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputEmail4">Email</label>
-                    <input type="email" class="form-control" id="inputEmail4">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="inputName">Full Name</label>
-                    <input type="text" class="form-control" id="inputName">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="customFile">Teachers</label>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label" for="customFile">Choose file</label>
-                    </div>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="customFile">Spiski 2</label>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label" for="customFile">Choose file</label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="customFile">Obossanoe vremya urokov</label>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label" for="customFile">Choose file</label>
-                    </div>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
 
         <hr>
         <!-- Footer -->
         <div class="text-center">
             <p>
-                All rights reserved otsosi (c)Confucius<br/>2020
+                All rights reserved<br/>2020
             </p>
             <a href="/test"><button class="btn btn-primary">test</button></a>
         </div>
@@ -93,4 +183,3 @@
 {% block scripts%}
     <script src="/static/js/files_upload.js"></script>
 {% endblock %}
-

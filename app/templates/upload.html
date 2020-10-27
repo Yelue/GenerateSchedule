@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" id="main">
+    <div class="container">
+        <!-- text  -->
+        <div>
+            <h1>Вітаємо!</h1>
+
+            <h5>
+                Шановний(а) {{data['name']}},<br/>
+                На адресу <span class="font-weight-bold">{{data['email']}}</span> буде надіслано листа.
+            </h5>
+        </div>
+        <br/>
+        
+        <!-- Footer -->
+        <hr>
+        <div class="text-center">
+            <p>
+                All rights reserved<br/>2020
+            </p>
+        </div>
+
+    </div>
+</div>
+{%endblock%}
