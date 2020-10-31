@@ -1,19 +1,37 @@
 from flask import Flask, request, jsonify, redirect, url_for, render_template
-from forms.search import Search_form
-from forms.new_schedule import New_schedule_form
 import os
-import webbrowser
 from threading import Timer
 from werkzeug.utils import secure_filename
-
 from numpy import random as rd
+from flask_sqlalchemy import SQLAlchemy
+
+from app.forms.search import Search_form
+from app.forms.new_schedule import New_schedule_form
+from app.tasks import load_db
+
 
 app = Flask(__name__)
-
+#need to move to config.py
 os.environ['APP_SETTINGS'] = 'config.DevelopmentConfig'
 app.config['SECRET_KEY'] = 'root'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['UPLOAD_FOLDER'] = './uploads'
+#need to add to environment variables
+username = 'wcqtmsosaglntk'
+password = '9f6497000b9a5f82fd288a15597cc09876c377b17f1b521848bc12a2f42577ef'
+database = 'dful1hqqvuc8a0'
+host = 'ec2-34-253-148-186.eu-west-1.compute.amazonaws.com'
+port = '5432'
+
+ENGINE_PATH_WIN_AUTH = f'postgres://{username}:{password}@{host}:{port}/{database}'
+app.config['SQLALCHEMY_DATABASE_URI'] = ENGINE_PATH_WIN_AUTH
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+db.create_all()
+
+load_db(db.engine)
 
 @app.route("/",  methods=['GET', 'POST'])
 def hello():
