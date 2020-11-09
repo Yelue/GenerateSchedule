@@ -1383,13 +1383,14 @@ REDIPS.drag = (function () {
 	// table ordinal defines table to scan (so it could be first, second, third table ...)
 	// if input parameter is not defined, function will prepare parameters for all tables
 	save_content = function (tbl) {
-		var query = '',		// define query parameter
+		var query = [],		// define query parameter
 			tbl_start,		// table loop starts from tbl_start parameter
 			tbl_end,		// table loop ends on tbl_end parameter
 			tbl_rows,		// number of table rows
 			cells,			// number of cells in the current row
 			tbl_cell,		// reference to the table cell
-			t, r, c, d;		// variables used in for loops
+			t, r, c, d,		// variables used in for loops
+			counter = 0;
 		// first sort tables array to it's original order
 		tables.sort(function (a, b) {
 			return a.idx - b.idx;
@@ -1426,16 +1427,16 @@ REDIPS.drag = (function () {
 						for (d = 0; d < tbl_cell.childNodes.length; d++) {
 							// childNodes should be DIVs, not \n childs
 							if (tbl_cell.childNodes[d].tagName === 'DIV') { // and yes, it should be uppercase
-								query += 'Id: '  + tbl_cell.childNodes[d].id + ' Table: ' + t + ' Row: ' + r + ' Col: ' + c + '\n';
+								// query += [tbl_cell.childNodes[d].id, t,  r, c];
+								query[counter] = {'les_id': tbl_cell.childNodes[d].id, 'week':t, 'les_num': r - 1, 'day': c};
+								counter++;
+								// query += 'Id: '  + tbl_cell.childNodes[d].id + ' Table: ' + t + ' Row: ' + r + ' Col: ' + c + '\n';
 							}
 						}
 					}
 				}
 			}
 		}
-		// cut last '&'
-
-		query = query.substring(0, query.length - 1);
 
 		// return prepared parameters (if tables are empty, returned value could be empty too)
 		return query;

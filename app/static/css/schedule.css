@@ -30,3 +30,18 @@ html{
 .lesson{
     min-height: 122px;
 }
+
+.dropdown-item.active{
+    background-color: #60cbdb;
+}
+
+
+.pos-plus{
+  transform: rotate(0deg);
+  transition: transform 1s linear;
+}
+
+.pos-plus.rotate{
+  transform: rotate(180deg);
+  transition: transform 1s linear;
+}
