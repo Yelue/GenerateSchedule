@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, redirect, url_for, render_template
+import json
 import os
 from threading import Timer
 from werkzeug.utils import secure_filename
@@ -15,7 +16,7 @@ app = Flask(__name__)
 os.environ['APP_SETTINGS'] = 'config.DevelopmentConfig'
 app.config['SECRET_KEY'] = 'root'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['UPLOAD_FOLDER'] = './uploads'
+app.config['UPLOAD_FOLDER'] = 'app/uploads'
 #need to add to environment variables
 username = 'wcqtmsosaglntk'
 password = '9f6497000b9a5f82fd288a15597cc09876c377b17f1b521848bc12a2f42577ef'
@@ -46,6 +47,35 @@ def test():
                             search_form=Search_form(request.form))
 
 
+@app.route('/postmethod', methods = ['GET', 'POST'])
+def get_post_javascript_data():
+    data = json.loads(request.form['javascript_data'])
+
+    json_to_DB = {
+        'day1': [0, 0, 0, 0, 0, 0],
+        'day2': [0, 0, 0, 0, 0, 0],
+        'day3': [0, 0, 0, 0, 0, 0],
+        'day4': [0, 0, 0, 0, 0, 0],
+        'day5': [0, 0, 0, 0, 0, 0],
+        'day6': [0, 0, 0, 0, 0, 0],
+        'day7': [0, 0, 0, 0, 0, 0],
+        'day8': [0, 0, 0, 0, 0, 0],
+        'day9': [0, 0, 0, 0, 0, 0],
+        'day10':[0, 0, 0, 0, 0, 0],
+        'day11':[0, 0, 0, 0, 0, 0],
+        'day12':[0, 0, 0, 0, 0, 0]
+    }
+
+    for lesson in data:
+        day = 'day' + str(lesson['day'] + 6*lesson['week'] + 1)
+        json_to_DB[day][lesson['les_num']] = lesson['les_id']
+
+    for i in json_to_DB:
+        print(i, ': ', json_to_DB[i])
+
+    return '', 200
+
+
 @app.route("/search",  methods=['GET', 'POST'])
 def search():
     s_f = Search_form(request.form)
@@ -59,14 +89,16 @@ def search():
                             search_value=search_val)
 
 
-@app.route("/schedule_id_<id>", methods=['GET', 'POST'])
-def schedule(id):
+@app.route("/schedule_id_<id>_w_<w_num>", methods=['GET', 'POST'])
+def schedule(id, w_num):
     # code to get data with id
     data = {
         'id': 0,
         'name': 'Example'
     }
+    week_active = ['active', ''] if w_num == '1' else ['', 'active']
     return render_template('schedule.html',
+                            week_active=week_active,
                             sch_data=data,
                             search_form=Search_form(request.form))
 
@@ -78,14 +110,22 @@ def upload():
                         'email': request.form['email'],
                         'name': request.form['name']
                       }
-
+        file_names = ['table_teacher',
+                      'table_lesson',
+                      'table_groups',
+                      'table_faculty',
+                      'table_depart',
+                      'table_cards',
+                      'table_teacher_emails',
+                      'table_student_emails']
         file = request.files['teachers']
         print(os.path.splitext(secure_filename(file.filename)))
         folder_name = '/' + str(rd.randint(0, 9999))
         os.mkdir(app.config['UPLOAD_FOLDER'] + folder_name)
-        for f in request.files:
+
+        for f, new_name in zip(request.files, file_names):
             file = request.files[f]
-            filename = f + os.path.splitext(secure_filename(file.filename))[1]
+            filename = new_name + os.path.splitext(secure_filename(file.filename))[1]
             file.save(
                         os.path.join(app.config['UPLOAD_FOLDER'] + folder_name,
                                         filename)

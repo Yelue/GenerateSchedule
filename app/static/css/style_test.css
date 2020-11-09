@@ -1,3 +1,4 @@
+
 body{
 	font-family: arial;
 	margin: 0px;
@@ -7,16 +8,8 @@ tr{
 	height: 100px;
 }
 td{
-	width: 204px;
+	min-width: 180px;
 }
-
-
-/* drag container */
-#drag{
-
-
-}
-
 
 /* drag objects (DIV inside table cells) */
 .drag{

@@ -14,4 +14,5 @@ def load_db(engine):
 	# LoadLessonTask.LoadLessonTask(engine=engine).load_to_db()
 	# LoadTeachersTask.LoadTeachersTask(engine=engine).load_to_db()
 	# LoadPairsTask.LoadPairsTask(engine=engine).load_to_db()
-	LoadCardTask.LoadCardTask(engine=engine).load_to_db()
+	# LoadCardTask.LoadCardTask(engine=engine).load_to_db()
+	pass

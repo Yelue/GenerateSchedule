@@ -3,12 +3,18 @@
     <link rel="stylesheet" type="text/css" href="/static/css/schedule.css">
 {% endblock %}
 {% block name_schedule %}
-    <div class="navbar-brand">
+    <div class="navbar-brand dropdown">
         <span id="logo-font">
             {{ sch_data['name'] }}
         </span>
+        <span class="" id="dropdownMenuLink"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <b id="logo-font">&#10010;</b>
+        </span>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item {{ week_active[0] }}" href="/schedule_id_{{ sch_data['id'] }}_w_1">Тиждень 1</a>
+            <a class="dropdown-item {{ week_active[1] }}" href="/schedule_id_{{ sch_data['id'] }}_w_2">Тиждень 2</a>
+        </div>
     </div>
-
 {% endblock %}
 {%block content%}
     <div id="schedule" class="container-fluid bg-light  ">
@@ -148,9 +154,10 @@
 
 {%endblock%}
 {% block scripts%}
-<script>
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-</script>
+
+    <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+    </script>
 {% endblock %}
