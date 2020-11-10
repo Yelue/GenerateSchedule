@@ -12,3 +12,4 @@ class BasicTask:
 
 	def get_file(self):
 		return open(self.full_path())
+

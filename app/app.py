@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from app.forms.search import Search_form
 from app.forms.new_schedule import New_schedule_form
-from app.tasks import load_db
+from app.tasks import load_db, prepare_random_schedule
 
 
 app = Flask(__name__)
@@ -33,6 +33,7 @@ db = SQLAlchemy(app)
 db.create_all()
 
 load_db(db.engine)
+prepare_random_schedule(db.engine)
 
 @app.route("/",  methods=['GET', 'POST'])
 def hello():
@@ -130,6 +131,8 @@ def upload():
                         os.path.join(app.config['UPLOAD_FOLDER'] + folder_name,
                                         filename)
                      )
+    load_db(db.engine)
+    #tut delete files
     return render_template('upload.html',
                             search_form=Search_form(request.form),
                             data=upload_data)

@@ -1,8 +1,10 @@
 from db.tasks import LoadDaysTask, LoadDepartmentTask, \
 						LoadFacultyTask, LoadGroupsTask, \
 						LoadLessonTask, LoadTeachersTask, \
-						LoadPairsTask, LoadCardTask
-
+						LoadPairsTask, LoadCardTask,\
+						LoadEmailStudents, LoadEmailTeachers,\
+						LoadRandomTeacherScheduleTask,\
+						LoadRandomStudentScheduleTask
 from db.orm.tables import *
 
 
@@ -15,4 +17,13 @@ def load_db(engine):
 	# LoadTeachersTask.LoadTeachersTask(engine=engine).load_to_db()
 	# LoadPairsTask.LoadPairsTask(engine=engine).load_to_db()
 	# LoadCardTask.LoadCardTask(engine=engine).load_to_db()
+	# LoadEmailStudents.LoadEmailStudents(engine=engine).load_to_db()
+	# LoadEmailTeachers.LoadEmailTeachers(engine=engine).load_to_db()
 	pass
+
+def prepare_random_schedule(self):
+	#prepare for teacher
+	print(LoadRandomTeacherScheduleTask.LoadRandomTeacherScheduleTask(engine=engine).load_teachers())
+	#prepare for student
+	print(LoadRandomStudentScheduleTask.LoadRandomStudentScheduleTask(engine=engine).load_students())
+	
