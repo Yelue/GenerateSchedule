@@ -43,7 +43,25 @@ def hello():
 
 @app.route("/test",  methods=['GET', 'POST'])
 def test():
+    temp_data = {
+        'week1':{
+            'lesson1':[{'id':1, 'name':'matan'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
+            'lesson2':[0, {'id':2, 'name':'linal'}, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
+            'lesson3':[{'id':1, 'name':'matan'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
+            'lesson4':[0, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
+            'lesson5':[{'id':3, 'name':'aos'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}]
+        },
+        'week2':{
+            'lesson1':[{'id':1, 'name':'matan'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
+            'lesson2':[0, {'id':2, 'name':'linal'}, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
+            'lesson3':[{'id':1, 'name':'matan'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
+            'lesson4':[0, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
+            'lesson5':[{'id':3, 'name':'aos'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}]
+        }
+    }
+
     return render_template('test.html',
+                            data=temp_data,
                             search_form=Search_form(request.form))
 
 
