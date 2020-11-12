@@ -8,7 +8,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 from app.forms.search import Search_form
 from app.forms.new_schedule import New_schedule_form
-from app.tasks import load_db, prepare_random_schedule
+from app.tasks import load_db, prepare_random_schedule,\
+                        prepare_schedule_interface,\
+                        load_schedule_db
 
 
 app = Flask(__name__)
@@ -32,8 +34,8 @@ db = SQLAlchemy(app)
 
 db.create_all()
 
-load_db(db.engine)
-prepare_random_schedule(db.engine)
+# load_db(db.engine)
+# prepare_random_schedule(db)
 
 @app.route("/",  methods=['GET', 'POST'])
 def hello():
@@ -44,23 +46,7 @@ def hello():
 
 @app.route("/test",  methods=['GET', 'POST'])
 def test():
-    temp_data = {
-        'week1':{
-            'lesson1':[{'id':1, 'name':'matan'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
-            'lesson2':[0, {'id':2, 'name':'linal'}, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
-            'lesson3':[{'id':1, 'name':'matan'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
-            'lesson4':[0, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
-            'lesson5':[{'id':3, 'name':'aos'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}]
-        },
-        'week2':{
-            'lesson1':[{'id':1, 'name':'matan'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
-            'lesson2':[0, {'id':2, 'name':'linal'}, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
-            'lesson3':[{'id':1, 'name':'matan'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
-            'lesson4':[0, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}],
-            'lesson5':[{'id':3, 'name':'aos'}, 0, 0, {'id':1, 'name':'matan'}, 0, {'id':1, 'name':'matan'}]
-        }
-    }
-
+    temp_data = prepare_schedule_interface(db=db)
     return render_template('test.html',
                             data=temp_data,
                             search_form=Search_form(request.form))
@@ -70,28 +56,7 @@ def test():
 def get_post_javascript_data():
     data = json.loads(request.form['javascript_data'])
 
-    json_to_DB = {
-        'day1': [0, 0, 0, 0, 0, 0],
-        'day2': [0, 0, 0, 0, 0, 0],
-        'day3': [0, 0, 0, 0, 0, 0],
-        'day4': [0, 0, 0, 0, 0, 0],
-        'day5': [0, 0, 0, 0, 0, 0],
-        'day6': [0, 0, 0, 0, 0, 0],
-        'day7': [0, 0, 0, 0, 0, 0],
-        'day8': [0, 0, 0, 0, 0, 0],
-        'day9': [0, 0, 0, 0, 0, 0],
-        'day10':[0, 0, 0, 0, 0, 0],
-        'day11':[0, 0, 0, 0, 0, 0],
-        'day12':[0, 0, 0, 0, 0, 0]
-    }
-
-    for lesson in data:
-        day = 'day' + str(lesson['day'] + 6*lesson['week'] + 1)
-        json_to_DB[day][lesson['les_num']] = lesson['les_id']
-
-    for i in json_to_DB:
-        print(i, ': ', json_to_DB[i])
-
+    load_schedule_db(data=data, db=db)
     return '', 200
 
 

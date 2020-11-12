@@ -4,7 +4,8 @@ from db.tasks import LoadDaysTask, LoadDepartmentTask, \
 						LoadPairsTask, LoadCardTask,\
 						LoadEmailStudents, LoadEmailTeachers,\
 						LoadRandomTeacherScheduleTask,\
-						LoadRandomStudentScheduleTask
+						LoadRandomStudentScheduleTask,\
+						LoadFullInfo
 from db.orm.tables import *
 
 
@@ -21,9 +22,48 @@ def load_db(engine):
 	# LoadEmailTeachers.LoadEmailTeachers(engine=engine).load_to_db()
 	pass
 
-def prepare_random_schedule(self):
+def prepare_random_schedule(db):
 	#prepare for teacher
-	print(LoadRandomTeacherScheduleTask.LoadRandomTeacherScheduleTask(engine=engine).load_teachers())
+	# LoadRandomTeacherScheduleTask.LoadRandomTeacherScheduleTask(db).load_to_db()
 	#prepare for student
-	print(LoadRandomStudentScheduleTask.LoadRandomStudentScheduleTask(engine=engine).load_students())
-	
+	LoadRandomStudentScheduleTask.LoadRandomStudentScheduleTask(db).load_to_db()
+	pass
+
+def prepare_schedule_interface(db, user_status='student', user_key='$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6'):
+	return LoadFullInfo.LoadFullInfo(db=db, user_status=user_status, user_key=user_key).create_schedule()
+
+def prepare_data_db(data,
+					user_status='student', 
+					user_key='$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6'):
+	data_db = []
+	if user_status=='student':
+		table = 'student_wish_schedule'
+		column_key = 'st_secret_key'
+	else:
+		table = 'teacher_wish_schedule'
+		column_key = 'tchr_secret_key'
+
+	for lesson in data:
+		data_db.append({
+						column_key: user_key, 
+						'st_schedule_id': int(lesson['les_id']),
+						'days_id': lesson['week']*6+lesson['day']+1,
+						'pairs_id': lesson['les_num']+1})
+	return data_db
+
+def load_schedule_db(data,
+					db, 
+					user_status='student', 
+					user_key='$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6'):
+	if user_status=='student':
+		table = Student_Wish_Schedule
+		column_key = 'st_schedule_id'
+	else:
+		table = Student_Wish_Schedule
+		column_key = 'tchr_schedule_id'
+
+	data = prepare_data_db(data=data,user_status=user_status,user_key=user_key)
+	for d in data:
+		db.session.query(table).filter_by(**{column_key:d[column_key]}).update(d)
+		
+	db.session.commit()

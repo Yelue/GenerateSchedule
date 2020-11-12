@@ -60,12 +60,12 @@ class Lesson(Base):
 
 	lesson_card_id = relationship('Card', back_populates='card_lesson_id')
 
-# class Room(Base):
-# 	__tablename__ = 'room'
+class Room(Base):
+	__tablename__ = 'room'
 
-# 	room_id = Column(Integer, primary_key=True)
-# 	room_number = Column(Integer, nullable=True)
-# 	room_type = Column(String(100), nullable=True)
+	room_id = Column(Integer, primary_key=True)
+	room_number = Column(Integer, nullable=True)
+	room_type = Column(String(100), nullable=True)
 
 	# room_class_id = relationship('Class', back_populates='class_room_id')
 
@@ -76,6 +76,7 @@ class Study_Days(Base):
 	name_day = Column(String(100), nullable=True)
 
 	days_class_id = relationship('Class', back_populates='class_days_id')
+	days_id_wish_student = relationship('Student_Wish_Schedule', back_populates='wish_student_days_id')
 
 class Pairs(Base):
 	__tablename__ = 'pairs'
@@ -85,21 +86,23 @@ class Pairs(Base):
 	end_time = Column(Time, nullable=False)
 
 	pairs_class_id = relationship('Class', back_populates='class_pairs_id')
+	pairs_id_wish_student = relationship('Student_Wish_Schedule', back_populates='wish_student_pairs_id')
 
 class Card(Base):
 	__tablename__ = 'card'
 
 	card_id = Column(Integer, primary_key=True)
-	group_id = Column(Integer, ForeignKey('group.group_id'))
+	group_id = Column(Integer, ForeignKey('groups.group_id'))
 	teacher_id = Column(Integer, ForeignKey('teacher.teacher_id'))
 	lesson_id = Column(Integer, ForeignKey('lesson.lesson_id'))
 	amount_id = Column(Integer, nullable=True)
 
-	card_group_id = relationship('Group', back_populates='group_card_id')
+	card_group_id = relationship('Groups', back_populates='group_card_id')
 	card_teacher_id = relationship('Teacher', back_populates='teacher_card_id')
 	card_lesson_id = relationship('Lesson', back_populates='lesson_card_id')
 
 	card_class_id = relationship('Class', back_populates='class_card_id')
+	card_id_wish_student = relationship('Student_Wish_Schedule', back_populates='wish_student_card_id')
 
 class Class(Base):
 	__tablename__ = 'class'
@@ -112,7 +115,7 @@ class Class(Base):
 
 	class_pairs_id = relationship('Pairs', back_populates='pairs_class_id')
 	class_days_id = relationship('Study_Days', back_populates='days_class_id')
-	class_room_id = relationship('Room', back_populates='room_class_id')
+	# class_room_id = relationship('Room', back_populates='room_class_id')
 	class_card_id = relationship('Card', back_populates='card_class_id')
 
 class Verif_Students(Base):
@@ -120,9 +123,10 @@ class Verif_Students(Base):
 
 	st_email = Column(String(100), primary_key=True)
 	st_secret_key = Column(String(100), nullable=False)
-	group_id = Column(Integer, ForeignKey('group.group_id'))
+	group_id = Column(Integer, ForeignKey('groups.group_id'))
 
-	verif_student_group = relationship('Group', back_populates='group_verif_student')
+	verif_student_group = relationship('Groups', back_populates='group_verif_student')
+	student_secret_key = relationship('Student_Wish_Schedule', back_populates='secret_key_student')
 
 class Verif_Teachers(Base):
 	__tablename__ = 'verif_teacher'
@@ -132,5 +136,19 @@ class Verif_Teachers(Base):
 	teacher_id = Column(Integer, ForeignKey('teacher.teacher_id'))
 
 	verif_teacher_teacher = relationship('Teacher', back_populates='teacher_verif_teacher')
+	
+class Student_Wish_Schedule(Base):
+	__tablename__ = 'student_wish_schedule'
+
+	st_schedule_id = Column(Integer, primary_key=True)
+	st_secret_key = Column(String(100), ForeignKey('verif_student.st_secret_key'))
+	card_id = Column(Integer, ForeignKey('card.card_id'))
+	days_id = Column(Integer, ForeignKey('study_days.days_id'))
+	pairs_id = Column(Integer, ForeignKey('pairs.pairs_id'))
+
+	wish_student_pairs_id = relationship('Pairs', back_populates='pairs_id_wish_student')
+	wish_student_days_id = relationship('Study_Days', back_populates='days_id_wish_student')
+	wish_student_card_id = relationship('Card', back_populates='card_id_wish_student')
+	secret_key_student = relationship('Verif_Students', back_populates='student_secret_key')
 
 Base.metadata.create_all(engine)
