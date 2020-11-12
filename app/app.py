@@ -5,6 +5,7 @@ from threading import Timer
 from werkzeug.utils import secure_filename
 from numpy import random as rd
 from flask_sqlalchemy import SQLAlchemy
+import shutil
 
 from app.forms.search import Search_form
 from app.forms.new_schedule import New_schedule_form
@@ -114,11 +115,14 @@ def upload():
                         os.path.join(app.config['UPLOAD_FOLDER'] + folder_name,
                                         filename)
                      )
-    load_db(db.engine)
-    #tut delete files
+    # load_db(db.engine)
+    shutil.rmtree(app.config['UPLOAD_FOLDER'] + folder_name)
     return render_template('upload.html',
                             search_form=Search_form(request.form),
                             data=upload_data)
+
+
+
 
 
 if __name__ == '__main__':
