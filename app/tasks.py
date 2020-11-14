@@ -5,7 +5,7 @@ from db.tasks import LoadDaysTask, LoadDepartmentTask, \
 						LoadEmailStudents, LoadEmailTeachers,\
 						LoadRandomTeacherScheduleTask,\
 						LoadRandomStudentScheduleTask,\
-						LoadFullInfo
+						LoadFullInfo, LoadFullSearchInfo
 from db.orm.tables import *
 
 
@@ -67,3 +67,31 @@ def load_schedule_db(data,
 		db.session.query(table).filter_by(**{column_key:d[column_key]}).update(d)
 		
 	db.session.commit()
+
+def search_schedule(db, search_query):
+	student = find_in_student(db, search_query)
+	teacher = find_in_teacher(db, search_query)
+	print(student,teacher)
+	if student:
+		#format_data
+		LoadFullSearchInfo.LoadFullSearchInfo(db, user_status='student', ids=student).create_schedule()
+	elif teacher:
+		#format_data
+		LoadFullSearchInfo.LoadFullSearchInfo(db, user_status='teacher', ids=teacher).create_schedule()
+
+
+def find_in_student(db, search_query):
+	try:
+		group_id = db.session.query(Groups).filter_by(group_name=search_query).first().group_id
+	except:
+		return False
+	cards_id = db.session.query(Card.card_id).filter_by(group_id=group_id).all()
+	return db.session.query(Student_Wish_Schedule.st_schedule_id).filter(Student_Wish_Schedule.card_id.in_(cards_id)).all()
+
+def find_in_teacher(db, search_query):
+	try:
+		teacher_id = db.session.query(Teacher).filter_by(teacher_short_name=search_query).first().teacher_id
+	except:
+		return False
+	cards_id = db.session.query(Card.card_id).filter_by(teacher_id=teacher_id).all()
+	return db.session.query(Teacher_Wish_Schedule.tchr_schedule_id).filter(Teacher_Wish_Schedule.card_id.in_(cards_id)).all()
