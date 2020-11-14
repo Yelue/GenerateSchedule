@@ -77,6 +77,7 @@ class Study_Days(Base):
 
 	days_class_id = relationship('Class', back_populates='class_days_id')
 	days_id_wish_student = relationship('Student_Wish_Schedule', back_populates='wish_student_days_id')
+	days_id_wish_teacher = relationship('Teacher_Wish_Schedule', back_populates='wish_teacher_days_id')
 
 class Pairs(Base):
 	__tablename__ = 'pairs'
@@ -87,6 +88,7 @@ class Pairs(Base):
 
 	pairs_class_id = relationship('Class', back_populates='class_pairs_id')
 	pairs_id_wish_student = relationship('Student_Wish_Schedule', back_populates='wish_student_pairs_id')
+	pairs_id_wish_teacher = relationship('Teacher_Wish_Schedule', back_populates='wish_teacher_pairs_id')
 
 class Card(Base):
 	__tablename__ = 'card'
@@ -95,7 +97,7 @@ class Card(Base):
 	group_id = Column(Integer, ForeignKey('groups.group_id'))
 	teacher_id = Column(Integer, ForeignKey('teacher.teacher_id'))
 	lesson_id = Column(Integer, ForeignKey('lesson.lesson_id'))
-	amount_id = Column(Integer, nullable=True)
+	amount_time = Column(Integer, nullable=True)
 
 	card_group_id = relationship('Groups', back_populates='group_card_id')
 	card_teacher_id = relationship('Teacher', back_populates='teacher_card_id')
@@ -103,6 +105,7 @@ class Card(Base):
 
 	card_class_id = relationship('Class', back_populates='class_card_id')
 	card_id_wish_student = relationship('Student_Wish_Schedule', back_populates='wish_student_card_id')
+	card_id_wish_teacher = relationship('Teacher_Wish_Schedule', back_populates='wish_teacher_card_id')
 
 class Class(Base):
 	__tablename__ = 'class'
@@ -136,7 +139,7 @@ class Verif_Teachers(Base):
 	teacher_id = Column(Integer, ForeignKey('teacher.teacher_id'))
 
 	verif_teacher_teacher = relationship('Teacher', back_populates='teacher_verif_teacher')
-	
+	teacher_secret_key = relationship('Teacher_Wish_Schedule', back_populates='secret_key_teacher')
 class Student_Wish_Schedule(Base):
 	__tablename__ = 'student_wish_schedule'
 
@@ -150,5 +153,19 @@ class Student_Wish_Schedule(Base):
 	wish_student_days_id = relationship('Study_Days', back_populates='days_id_wish_student')
 	wish_student_card_id = relationship('Card', back_populates='card_id_wish_student')
 	secret_key_student = relationship('Verif_Students', back_populates='student_secret_key')
+
+class Teacher_Wish_Schedule(Base):
+	__tablename__ = 'teacher_wish_schedule'
+
+	tchr_schedule_id = Column(Integer, primary_key=True)
+	tchr_secret_key = Column(String(100), ForeignKey('verif_teacher.tchr_secret_key'))
+	card_id = Column(Integer, ForeignKey('card.card_id'))
+	days_id = Column(Integer, ForeignKey('study_days.days_id'))
+	pairs_id = Column(Integer, ForeignKey('pairs.pairs_id'))
+
+	wish_teacher_pairs_id = relationship('Pairs', back_populates='pairs_id_wish_teacher')
+	wish_teacher_days_id = relationship('Study_Days', back_populates='days_id_wish_teacher')
+	wish_teacher_card_id = relationship('Card', back_populates='card_id_wish_teacher')
+	secret_key_teacher = relationship('Verif_Teachers', back_populates='teacher_secret_key')
 
 Base.metadata.create_all(engine)

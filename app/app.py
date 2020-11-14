@@ -11,7 +11,7 @@ from app.forms.search import Search_form
 from app.forms.new_schedule import New_schedule_form
 from app.tasks import load_db, prepare_random_schedule,\
                         prepare_schedule_interface,\
-                        load_schedule_db
+                        load_schedule_db,search_schedule
 
 
 app = Flask(__name__)
@@ -37,7 +37,10 @@ db.create_all()
 
 # load_db(db.engine)
 # prepare_random_schedule(db)
-
+#test student query
+# search_schedule(db, 'КМ-71')
+#test teacher query
+# search_schedule(db, 'Шияк Б. А.')
 @app.route("/",  methods=['GET', 'POST'])
 def hello():
     return render_template('index.html',
@@ -67,7 +70,8 @@ def search():
     search_val = ''
     if request.method == 'POST':
         search_val = request.form['search_value']
-
+    #сюда пихаешь кверю
+    # search_schedule(db, 'КМ-71')
     s_f.search_value.data = ''
     return render_template('search_result.html',
                             search_form=s_f,
