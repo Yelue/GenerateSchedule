@@ -26,7 +26,7 @@ function save(){
     else {
 
 
-        $.post( "/postmethod", {
+        $.post( "/post_desired_schedule", {
             'javascript_data': JSON.stringify(content)
         });
 

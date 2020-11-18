@@ -11,7 +11,8 @@ from app.forms.search import Search_form
 from app.forms.new_schedule import New_schedule_form
 from app.tasks import load_db, prepare_random_schedule,\
                         prepare_schedule_interface,\
-                        load_schedule_db,search_schedule
+                        load_schedule_db,search_schedule, \
+                        check_schedule
 
 
 app = Flask(__name__)
@@ -20,6 +21,7 @@ os.environ['APP_SETTINGS'] = 'config.DevelopmentConfig'
 app.config['SECRET_KEY'] = 'root'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['UPLOAD_FOLDER'] = 'app/uploads'
+
 #need to add to environment variables
 username = 'wcqtmsosaglntk'
 password = '9f6497000b9a5f82fd288a15597cc09876c377b17f1b521848bc12a2f42577ef'
@@ -41,59 +43,63 @@ db.create_all()
 # search_schedule(db, 'КМ-71')
 #test teacher query
 # search_schedule(db, 'Шияк Б. А.')
+
+
 @app.route("/",  methods=['GET', 'POST'])
-def hello():
+def index():
     return render_template('index.html',
                             search_form=Search_form(request.form),
                             new_schedule_form=New_schedule_form(request.form))
 
 
-@app.route("/test",  methods=['GET', 'POST'])
-def test():
+@app.route("/scheduledesign",  methods=['GET', 'POST'])
+def scheduledesign():
     temp_data = prepare_schedule_interface(db=db)
-    return render_template('test.html',
+    return render_template('schedule_design.html',
                             data=temp_data,
                             search_form=Search_form(request.form))
 
 
-@app.route('/postmethod', methods = ['GET', 'POST'])
-def get_post_javascript_data():
+@app.route('/post_desired_schedule', methods = ['GET', 'POST'])
+def get_desired_schedule():
     data = json.loads(request.form['javascript_data'])
 
     load_schedule_db(data=data, db=db)
     return '', 200
 
 
-@app.route("/search",  methods=['GET', 'POST'])
+@app.route("/no_schedule",  methods=['GET', 'POST'])
 def search():
     s_f = Search_form(request.form)
-    search_val = ''
+    search_query = ''
     if request.method == 'POST':
-        search_val = request.form['search_value']
-    #сюда пихаешь кверю
-    # search_schedule(db, 'КМ-71')
+        search_query = request.form['search_value'].strip()
+
+
     s_f.search_value.data = ''
-    return render_template('search_result.html',
-                            search_form=s_f,
-                            search_value=search_val)
+    if check_schedule(db, search_query):
+        return redirect(f'/schedule_{search_query}_w_1')
+    else:
+        return render_template('search_result.html',
+                               search_form=s_f,
+                               search_value=search_query)
 
 
-@app.route("/schedule_id_<id>_w_<w_num>", methods=['GET', 'POST'])
-def schedule(id, w_num):
-    # code to get data with id
-    data = {
-        'id': 0,
-        'name': 'Example'
-    }
-    week_active = ['active', ''] if w_num == '1' else ['', 'active']
+@app.route("/schedule_<name>_w_<w_num>", methods=['GET', 'POST'])
+def schedule(name, w_num):
+    search_type, schedule = search_schedule(db, name)
+    schedule = schedule[f'week{w_num}']
+    week_active_dropdown = ['active disabled', ''] if w_num == '1' else ['', 'active disabled']
     return render_template('schedule.html',
-                            week_active=week_active,
-                            sch_data=data,
+                            week_active_dropdown=week_active_dropdown,
+                            search_type=search_type,
+                            schedule=schedule,
+                            name=name,
                             search_form=Search_form(request.form))
 
 
-@app.route('/upload', methods=['GET', 'POST'])
-def upload():
+@app.route('/upload_files', methods=['GET', 'POST'])
+def upload_files():
     if request.method == 'POST':
         upload_data = {
                         'email': request.form['email'],

@@ -33,7 +33,7 @@ def prepare_schedule_interface(db, user_status='student', user_key='$5$rounds=53
 	return LoadFullInfo.LoadFullInfo(db=db, user_status=user_status, user_key=user_key).create_schedule()
 
 def prepare_data_db(data,
-					user_status='student', 
+					user_status='student',
 					user_key='$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6'):
 	data_db = []
 	if user_status=='student':
@@ -45,15 +45,15 @@ def prepare_data_db(data,
 
 	for lesson in data:
 		data_db.append({
-						column_key: user_key, 
+						column_key: user_key,
 						'st_schedule_id': int(lesson['les_id']),
 						'days_id': lesson['week']*6+lesson['day']+1,
 						'pairs_id': lesson['les_num']+1})
 	return data_db
 
 def load_schedule_db(data,
-					db, 
-					user_status='student', 
+					db,
+					user_status='student',
 					user_key='$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6'):
 	if user_status=='student':
 		table = Student_Wish_Schedule
@@ -65,19 +65,26 @@ def load_schedule_db(data,
 	data = prepare_data_db(data=data,user_status=user_status,user_key=user_key)
 	for d in data:
 		db.session.query(table).filter_by(**{column_key:d[column_key]}).update(d)
-		
+
 	db.session.commit()
 
 def search_schedule(db, search_query):
 	student = find_in_student(db, search_query)
 	teacher = find_in_teacher(db, search_query)
-	print(student,teacher)
+
 	if student:
 		#format_data
-		LoadFullSearchInfo.LoadFullSearchInfo(db, user_status='student', ids=student).create_schedule()
+		return 'stud', LoadFullSearchInfo.LoadFullSearchInfo(db, user_status='student', ids=student).create_schedule()
 	elif teacher:
 		#format_data
-		LoadFullSearchInfo.LoadFullSearchInfo(db, user_status='teacher', ids=teacher).create_schedule()
+		return 'teach', LoadFullSearchInfo.LoadFullSearchInfo(db, user_status='teacher', ids=teacher).create_schedule()
+
+
+def check_schedule(db, search_query):
+	student = find_in_student(db, search_query)
+	teacher = find_in_teacher(db, search_query)
+
+	return student or teacher
 
 
 def find_in_student(db, search_query):

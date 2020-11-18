@@ -27,8 +27,12 @@ html{
     background-color: white;
 }
 
-.lesson{
+.lesson-stud{
     min-height: 122px;
+}
+
+.lesson-teach{
+    min-height: 157px;
 }
 
 .dropdown-item.active{
