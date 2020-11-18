@@ -1,111 +1,47 @@
 {% extends "base.html" %}
-{% block head %}
-	<link rel="stylesheet" href="/static/css/style_test.css" type="text/css" media="screen" />
-{% endblock %}
-{%block content%}
-	<div class="container" id="main">
-		<div id="drag" class="container-fluid">
-			<div class="row justify-content-md-center">
-				<div class="col col-auto">
-					<br/><h1 class="text-center">Тиждень 1</h1>
-					<table id="table1">
-						<tr style="height:30px;">
-							<td class="marke">пн</td>
-							<td class="marke">вт</td>
-							<td class="marke">ср</td>
-							<td class="marke">чт</td>
-							<td class="marke">пт</td>
-							<td class="marke">сб</td>
-						</tr>
-						{% for lesson_week in data['week1'].values() %}
-							<tr style="background-color: #eee">
-								{% for lesson in lesson_week %}
+{% block content %}
+<div class="container" id="main">
+    <div class="container">
 
-									{% if lesson == 0 %}
-										<td></td>
-									{% else %}
-										<td>
-											<div id="{{ lesson['id'] }}" class="card drag">
-												<div class="card-body">
-													{{ lesson['name'] }}
-												</div>
-											</div>
-										</td>
-									{% endif %}
-								{% endfor %}
-							</tr>
+        <!-- text  -->
+        <div>
+            <br/>
+            <div class="row">
+              <div class="col-sm-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Створення розкладу</h5>
+                      <p class="card-text">Цей приклад демонстує, як буде виглядати сторінка створення власного розкладу</p>
+                      <a href="#" class="btn btn-primary">Перейти</a>
+                    </div>
+                  </div>
+              </div>
+              <div class="col-sm-4">
+                  <div class="card">
+                    <img class="card-img-top" src="..." alt="Card image cap">
+                    <div class="card-body">
+                      <h5 class="card-title">Приклад розкладу групи</h5>
+                      <p class="card-text">Приклад демонструє форматування, якіст роботи та можливості цієї функції проекту</p>
+                      <a href="#" class="btn btn-primary">Перейти</a>
+                    </div>
+                  </div>
+              </div>
+              <div class="col-sm-4">
+                  <div class="card">
+                    <img class="card-img-top" src="..." alt="Card image cap">
+                    <div class="card-body">
+                      <h5 class="card-title">Приклад розкладу вчителя</h5>
+                      <p class="card-text">Приклад демонструє форматування, якіст роботи та можливості цієї функції проекту</p>
+                      <a href="#" class="btn btn-primary">Перейти</a>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        <hr>
 
-						{% endfor %}
-					</table>
-
-					<br/><h1 class="text-center">Тиждень 2</h1>
-					<table id="table2">
-						<tr style="height:30px;">
-							<td class="marke">пн</td>
-							<td class="marke">вт</td>
-							<td class="marke">ср</td>
-							<td class="marke">чт</td>
-							<td class="marke">пт</td>
-							<td class="marke">сб</td>
-						</tr>
-						{% for lesson_week in data['week2'].values() %}
-							<tr style="background-color: #eee">
-								{% for lesson in lesson_week %}
-
-									{% if lesson == 0 %}
-										<td></td>
-									{% else %}
-										<td>
-											<div id="{{ lesson['id'] }}" class="card drag">
-												<div class="card-body">
-													{{ lesson['name'] }}
-												</div>
-											</div>
-										</td>
-									{% endif %}
-								{% endfor %}
-							</tr>
-
-						{% endfor %}
-					</table>
-				</div>
-			</div>
-
-
-		<div class="text-right">
-			<br/>
-			<div class="btn btn-primary btn-lg"  data-toggle="modal" data-target="#ConfirmModal">
-				<span style="margin-left:15px;margin-right:15px;">Зберегти</span>
-			</div>
-			<br/>
-
-		</div>
-	</div>
-
-	<div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h4 class="modal-title" id="ModalLabel">Увага!</h4>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	        <h5 class="alert alert-danger">
-	        	Пісял підтвердження Ви не зможете нічого змінити.<br/>
-				 Ви впевнені, що вказали все відповідно до ваших побажань?
-	        </h5>
-	      </div>
-	      <div class="modal-footer justify-content-sm-between">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Повернутись до розкладу</button>
-	        <button type="button" class="btn btn-primary" onclick="save()" data-dismiss="modal" aria-label="Close">Зберегти розклад</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+    </div>
+</div>
 {%endblock%}
+
 {% block scripts%}
-	<script type="text/javascript" src="/static/js/drag.js"></script>
-	<script type="text/javascript" src="/static/js/funcs.js"></script>
 {% endblock %}

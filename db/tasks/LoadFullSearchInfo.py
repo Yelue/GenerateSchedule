@@ -1,4 +1,4 @@
-import pandas as pd 
+import pandas as pd
 
 
 class LoadFullSearchInfo:
@@ -15,17 +15,17 @@ class LoadFullSearchInfo:
 		else:
 			table = 'teacher_wish_schedule'
 			self.column_key = 'tchr_schedule_id'
-	
+
 		df = pd.read_sql(f"select {self.column_key},card_id,pairs_id,days_id from {table} where {self.column_key} in {self.ids}", con=self.db.engine)
-		
-		
+
+
 		return df
 
 	def full_info(self, df):
 		ids = tuple(df.card_id.values)
 		card = pd.read_sql(f'select * from card where card_id in {ids}', con=self.db.engine)
 		df = df.merge(card, how='inner', on='card_id')
-		
+
 		#lesson
 		lesson = pd.read_sql('select * from lesson', con=self.db.engine)
 		df = df.merge(lesson, how='inner', on='lesson_id').drop(columns=['lesson_id'])
@@ -38,14 +38,13 @@ class LoadFullSearchInfo:
 		teacher = pd.read_sql('select * from teacher', con=self.db.engine)
 		df = df.merge(teacher, how='inner', on='teacher_id').drop(columns=['teacher_id','teacher_degree'])
 		del teacher
-		# return df.drop(columns=[self.column_key,'card_id', 'lesson_id', 'lesson_long_name']) 
+		# return df.drop(columns=[self.column_key,'card_id', 'lesson_id', 'lesson_long_name'])
 		return df.drop(columns=['card_id','amount_time'])
 	def format_data(self, df):
 		df.loc[df.lesson_type=='None','lesson_type'] = ''
-		df['lesson_short_name'] = df['lesson_short_name']+ ' ' +df['lesson_type']
-		df['lesson_long_name'] = df['lesson_long_name']+ ' ' +df['lesson_type']
+		
 		df.rename(columns={'st_schedule_id':'id','tchr_schedule_id':'id'}, inplace=True)
-		df.drop(columns=['lesson_type'],inplace=True)
+
 		# (df.days_id==j)&(df.pairs_id==i)
 		# print({'lesson%s'%i: [df[(df.days_id==j)&(df.pairs_id==i)].to_dict('r') for j in range(1,7)] for i in range(1,6)})
 		data = {
@@ -59,15 +58,14 @@ class LoadFullSearchInfo:
 		for week in data.keys():
 			for lesson in data[week].keys():
 				for k, cell in enumerate(data[week][lesson]):
-					
+
 					if not cell:
 						data[week][lesson][k] = 0
-					
+
 
 		return data
 	def create_schedule(self):
 		df = self.find_card()
 		df = self.full_info(df)
 		df = self.format_data(df)
-		print(df)
 		return df

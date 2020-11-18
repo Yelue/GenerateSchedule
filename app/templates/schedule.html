@@ -5,14 +5,14 @@
 {% block name_schedule %}
     <div class="navbar-brand dropdown">
         <span id="logo-font">
-            {{ sch_data['name'] }}
+            {{ name }}
         </span>
         <span class="" id="dropdownMenuLink"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <b id="logo-font">&#10010;</b>
         </span>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item {{ week_active[0] }}" href="/schedule_id_{{ sch_data['id'] }}_w_1">Тиждень 1</a>
-            <a class="dropdown-item {{ week_active[1] }}" href="/schedule_id_{{ sch_data['id'] }}_w_2">Тиждень 2</a>
+            <a class="dropdown-item {{ week_active_dropdown[0] }}" href="/schedule_{{ name }}_w_1">Тиждень 1</a>
+            <a class="dropdown-item {{ week_active_dropdown[1] }}" href="/schedule_{{ name }}_w_2">Тиждень 2</a>
         </div>
     </div>
 {% endblock %}
@@ -27,121 +27,75 @@
                 <div class="col-lg col-2-cust border "> ПТ </div>
                 <div class="col-lg col-2-cust border "> СБ </div>
             </div>
-            <div class="row" >
-                <div class="col-lg col-0 border text-center align-middle"> 1 </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-            </div>
-            <div class="row" >
-                <div class="col-lg col-0 border text-center align-middle"> 1 </div>
-                <div class="col-lg col-2-cust border lesson">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="Математичний Аналіз - 1">
-                                    <h5>МА-1</h5>
+                {% for lesson_num in schedule %}
+                <div class="row" >
+                    <div class="col-lg col-0 border text-center align-middle"> {{ lesson_num[-1] }} </div>
+                    {% for lesson in schedule[lesson_num] %}
+                        {% if search_type == 'stud' %}
+                            {% if lesson == 0 %}
+                                <div class="col-lg col-2-cust border lesson-stud"></div>
+                            {% else %}
+                                <div class="col-lg col-2-cust border lesson-stud">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="{{ lesson[0]['lesson_long_name'] }}">
+                                                        <h5> {{ lesson[0]['lesson_short_name'] }} </h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="{{ lesson[0]['teacher_long_name'] }}">
+                                                        {{ lesson[0]['teacher_short_name']}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{ lesson[0]['lesson_type'] }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="Чертов Олег Романович">Чертов О.Р.</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">лекція</div>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-
-                </div>
-            </div>
-            <div class="row" >
-                <div class="col-lg col-0 border text-center align-middle"> 1 </div>
-                <div class="col-lg col-2-cust border lesson">
-
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-            </div>
-            <div class="row" >
-                <div class="col-lg col-0 border text-center align-middle"> 1 </div>
-                <div class="col-lg col-2-cust border lesson">
-
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-            </div>
-            <div class="row" >
-                <div class="col-lg col-0 border text-center align-middle"> 1 </div>
-                <div class="col-lg col-2-cust border lesson">
-
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="Нелінійний Аналіз - 1">
-                                    <h5>НА-1</h5>
+                            {% endif %}
+                        {% else %}
+                            {% if lesson == 0 %}
+                                <div class="col-lg col-2-cust border lesson-teach"></div>
+                            {% else %}
+                                <div class="col-lg col-2-cust border lesson-teach">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="{{ lesson[0]['lesson_long_name'] }}">
+                                                        <h5> {{ lesson[0]['lesson_short_name'] }} </h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="{{ lesson[0]['teacher_long_name'] }}">
+                                                        {{ lesson[0]['teacher_short_name']}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col border-bottom">
+                                                        {{ lesson[0]['group_name']}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{ lesson[0]['lesson_type'] }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border-bottom" data-toggle="tooltip" data-placement="left" title="Незнаю Хер Знає">Незнаю Х.З.</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">Лекція</div>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-                <div class="col-lg col-2-cust border lesson">
-                </div>
-            </div>
+                {% endfor %}
 
             <br/><br/>
             <div class="text-center">
