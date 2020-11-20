@@ -37,13 +37,6 @@ db = SQLAlchemy(app)
 
 db.create_all()
 
-# load_db(db.engine)
-# prepare_random_schedule(db)
-#test student query
-# search_schedule(db, 'КМ-71')
-#test teacher query
-# search_schedule(db, 'Шияк Б. А.')
-
 
 @app.route("/",  methods=['GET', 'POST'])
 def index():
@@ -125,7 +118,7 @@ def upload_files():
                         os.path.join(app.config['UPLOAD_FOLDER'] + folder_name,
                                         filename)
                      )
-    # load_db(db.engine)
+    load_db(db.engine)
     shutil.rmtree(app.config['UPLOAD_FOLDER'] + folder_name)
     return render_template('upload.html',
                             search_form=Search_form(request.form),

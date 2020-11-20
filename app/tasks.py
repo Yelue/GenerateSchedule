@@ -10,24 +10,23 @@ from db.orm.tables import *
 
 
 def load_db(engine):
-	# LoadDaysTask.LoadDaysTask(engine=engine).load_to_db()
-	# LoadFacultyTask.LoadFacultyTask(engine=engine).load_to_db()
-	# LoadDepartmentTask.LoadDepartmentTask(engine=engine).load_to_db()
-	# LoadGroupsTask.LoadGroupsTask(engine=engine).load_to_db()
-	# LoadLessonTask.LoadLessonTask(engine=engine).load_to_db()
-	# LoadTeachersTask.LoadTeachersTask(engine=engine).load_to_db()
-	# LoadPairsTask.LoadPairsTask(engine=engine).load_to_db()
-	# LoadCardTask.LoadCardTask(engine=engine).load_to_db()
-	# LoadEmailStudents.LoadEmailStudents(engine=engine).load_to_db()
-	# LoadEmailTeachers.LoadEmailTeachers(engine=engine).load_to_db()
-	pass
+	LoadDaysTask.LoadDaysTask(engine=engine).load_to_db()
+	LoadFacultyTask.LoadFacultyTask(engine=engine).load_to_db()
+	LoadDepartmentTask.LoadDepartmentTask(engine=engine).load_to_db()
+	LoadGroupsTask.LoadGroupsTask(engine=engine).load_to_db()
+	LoadLessonTask.LoadLessonTask(engine=engine).load_to_db()
+	LoadTeachersTask.LoadTeachersTask(engine=engine).load_to_db()
+	LoadPairsTask.LoadPairsTask(engine=engine).load_to_db()
+	LoadCardTask.LoadCardTask(engine=engine).load_to_db()
+	LoadEmailStudents.LoadEmailStudents(engine=engine).load_to_db()
+	LoadEmailTeachers.LoadEmailTeachers(engine=engine).load_to_db()
+	
 
 def prepare_random_schedule(db):
 	#prepare for teacher
-	# LoadRandomTeacherScheduleTask.LoadRandomTeacherScheduleTask(db).load_to_db()
+	LoadRandomTeacherScheduleTask.LoadRandomTeacherScheduleTask(db).load_to_db()
 	#prepare for student
 	LoadRandomStudentScheduleTask.LoadRandomStudentScheduleTask(db).load_to_db()
-	pass
 
 def prepare_schedule_interface(db, user_status='student', user_key='$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6'):
 	return LoadFullInfo.LoadFullInfo(db=db, user_status=user_status, user_key=user_key).create_schedule()
