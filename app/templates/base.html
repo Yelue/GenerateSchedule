@@ -8,14 +8,20 @@
         <link rel="stylesheet" type="text/css" href="/static/css/style.css">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
         <title>mySchedule</title>
+
         {% block head %}{% endblock %}
     </head>
     <body class="bg-info gg">
         <!-- Header -->
         <nav class="navbar navbar-expand-lg navbar-light bg-info justify-content-sm-between">
-            <a class="navbar-brand" href="/">
-                <span id="logo-font">mySchedule</span>
-            </a>
+            <div class="row">
+                <a class="navbar-brand col" href="/">
+                    <span id="logo-font">mySchedule</span>
+                </a>
+                <a class="nav-item col" style="padding:20px;text-decoration:none" href="/loadfiles">
+                    <span id="logo-font" id="creare-schedule-page" style="font-size: 20px;">Створити розклад</span>
+                </a>
+            </div>
             {% block name_schedule %} {% endblock %}
             <form class="form-inline " action="/no_schedule" method="POST">
                 {{ search_form.search_value(class="form-control mr-sm-2",

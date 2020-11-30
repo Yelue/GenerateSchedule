@@ -53,6 +53,13 @@ def scheduledesign():
                             search_form=Search_form(request.form))
 
 
+@app.route("/loadfiles",  methods=['GET', 'POST'])
+def schedule_files_load():
+    return render_template('load_forms.html',
+                            search_form=Search_form(request.form),
+                            new_schedule_form=New_schedule_form(request.form))
+
+
 @app.route('/post_desired_schedule', methods = ['GET', 'POST'])
 def get_desired_schedule():
     data = json.loads(request.form['javascript_data'])
