@@ -1,3 +1,12 @@
+import sqlalchemy
+import numpy as np
+
+from alg.population import Population
+from alg.student_wishes import SWishesConnector
+from alg.teacher_wishes import TWishesConnector
+from alg.collection_cards import CollectionCards
+from alg.genetic_algorithm import GeneticAlgorithm
+
 from db.tasks import LoadDaysTask, LoadDepartmentTask, \
 						LoadFacultyTask, LoadGroupsTask, \
 						LoadLessonTask, LoadTeachersTask, \
@@ -101,3 +110,34 @@ def find_in_teacher(db, search_query):
 		return False
 	cards_id = db.session.query(Card.card_id).filter_by(teacher_id=teacher_id).all()
 	return db.session.query(Teacher_Wish_Schedule.tchr_schedule_id).filter(Teacher_Wish_Schedule.card_id.in_(cards_id)).all()
+
+def genetic_algorithm(db):
+
+
+	FACULTY_ID = 2
+	rooms = np.array(range(1, 30))
+
+	clc = CollectionCards(FACULTY_ID, db.session)
+	swc = SWishesConnector(FACULTY_ID, db.session)
+	twc = TWishesConnector(FACULTY_ID, db.session)
+
+	ppl = Population(rooms, 100, FACULTY_ID, db.session)
+	ppl.create_chromosomes()
+
+	ga = GeneticAlgorithm(ppl.chromosomes, clc, swc, twc)
+	ga.fit(n_iter = 3)
+
+	classesL = []
+	TB_chromosome = ga.chromosomes[0][0]
+	for lesson in TB_chromosome.lessons:
+		for card in lesson.cards:
+
+			room, wdc = TB_chromosome.get_wdcByLessonNum(lesson.unNum)
+			days_id = (wdc[0] + 1) * wdc[1] + 1
+			pairs_id = wdc[2] + 1
+
+			#classesL.append(Class(card_id = int(card), days_id = int(days_id), pairs_id = int(pairs_id)))
+			print('Card_id: {}, days_id: {}, pairs_id: {}'.format(card, days_id, pairs_id))
+
+	#db.session.add_all(classesL)
+	#db.session.commit()
