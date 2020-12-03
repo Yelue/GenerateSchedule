@@ -12,7 +12,7 @@ from app.forms.new_schedule import New_schedule_form
 from app.tasks import load_db, prepare_random_schedule,\
                         prepare_schedule_interface,\
                         load_schedule_db,search_schedule, \
-                        check_schedule
+                        check_schedule, genetic_algorithm
 
 
 app = Flask(__name__)
