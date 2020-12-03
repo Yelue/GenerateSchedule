@@ -37,7 +37,8 @@ def prepare_random_schedule(db):
 	# LoadRandomTeacherScheduleTask.LoadRandomTeacherScheduleTask(db).load_to_db()
 	#prepare for student
 	# LoadRandomStudentScheduleTask.LoadRandomStudentScheduleTask(db).load_to_db()
-
+	pass 
+	
 def prepare_schedule_interface(db, user_status='student', user_key='$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6'):
 	return LoadFullInfo.LoadFullInfo(db=db, user_status=user_status, user_key=user_key).create_schedule()
 
