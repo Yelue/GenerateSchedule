@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, redirect, url_for, render_template
+from flask import Flask, request, jsonify, redirect, url_for, render_template, jsonify, make_response
 import json
 import os
 from threading import Timer
@@ -6,37 +6,38 @@ from werkzeug.utils import secure_filename
 from numpy import random as rd
 from flask_sqlalchemy import SQLAlchemy
 import shutil
-
+import requests
+import connexion
+    
 from app.forms.search import Search_form
 from app.forms.new_schedule import New_schedule_form
 from app.tasks import load_db, prepare_random_schedule,\
                         prepare_schedule_interface,\
                         load_schedule_db,search_schedule, \
-                        check_schedule, genetic_algorithm
-
+                        check_schedule, find_all_teachers,\
+                        users_load, genetic_algorithm
 
 app = Flask(__name__)
+
 #need to move to config.py
-os.environ['APP_SETTINGS'] = 'config.DevelopmentConfig'
-app.config['SECRET_KEY'] = 'root'
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['UPLOAD_FOLDER'] = 'app/uploads'
+# os.environ['APP_SETTINGS'] = 'config.DevelopmentConfig'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = int(os.environ.get('SEND_FILE_MAX_AGE_DEFAULT'))
+app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')
 
 #need to add to environment variables
-username = 'wcqtmsosaglntk'
-password = '9f6497000b9a5f82fd288a15597cc09876c377b17f1b521848bc12a2f42577ef'
-database = 'dful1hqqvuc8a0'
-host = 'ec2-34-253-148-186.eu-west-1.compute.amazonaws.com'
-port = '5432'
-
-ENGINE_PATH_WIN_AUTH = f'postgres://{username}:{password}@{host}:{port}/{database}'
-app.config['SQLALCHEMY_DATABASE_URI'] = ENGINE_PATH_WIN_AUTH
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = bool(int(os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')))
 
 db = SQLAlchemy(app)
 
 db.create_all()
-
+# load_db(db.engine)
+# users_load(db=db)
+# prepare_random_schedule(db=db)
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 @app.route("/",  methods=['GET', 'POST'])
 def index():
@@ -45,9 +46,13 @@ def index():
                             new_schedule_form=New_schedule_form(request.form))
 
 
-@app.route("/scheduledesign",  methods=['GET', 'POST'])
-def scheduledesign():
+@app.route("/scheduledesign/<user_status>/<user_key>",  methods=['GET', 'POST'])
+def scheduledesign(user_status, user_key):
     temp_data = prepare_schedule_interface(db=db)
+    print(temp_data)
+    #https://generateschedule.herokuapp.com/scheduledesign/teacher/'$5$rounds=535000$mVjGYNm5/iJ49mv5$O/BlazUbmN76BHcwWdXE9fwaP6yCNTvhdX7/ntMX5I2'
+    #https://generateschedule.herokuapp.com/scheduledesign/student/$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6
+    print(user_status,user_key)
     return render_template('schedule_design.html',
                             data=temp_data,
                             search_form=Search_form(request.form))
@@ -125,15 +130,28 @@ def upload_files():
                         os.path.join(app.config['UPLOAD_FOLDER'] + folder_name,
                                         filename)
                      )
-    load_db(db.engine)
+    # load_db(db.engine)
     shutil.rmtree(app.config['UPLOAD_FOLDER'] + folder_name)
     return render_template('upload.html',
                             search_form=Search_form(request.form),
                             data=upload_data)
 
+@app.route('/api/readteachers', methods=['GET'])
+def get_teachers():
+    teachers = find_all_teachers(db=db)
+    
+    return jsonify({'teachers': teachers})
 
+@app.route('/api/schedule/<query>', methods=['GET'])
+def get_schedule(query):
+    return jsonify({'schedule': search_schedule(db,query)})
 
+@app.route('/api/lesson_cards/<user_status>/<user_key>', methods=['GET'])
+def lesson_cards(user_status, user_key):
+    #prepare_schedule_interface have default values
+    data = prepare_schedule_interface(db=db)
 
+    return jsonify({'cards': data})
 
 if __name__ == '__main__':
     app.run()

@@ -14,9 +14,8 @@ class LoadFullInfo:
 		else:
 			table = 'teacher_wish_schedule'
 			self.column_key = 'tchr_secret_key'
-		print('QUERY\n',f"select * from {table} where {self.column_key} = '{self.user_key}'")
+		
 		df = pd.read_sql(f"select * from {table} where {self.column_key} = '{self.user_key}'", con=self.db.engine)
-		print(df)
 		return df
 
 	def full_info(self, df):
@@ -36,21 +35,19 @@ class LoadFullInfo:
 
 		data = {
 				'week1':{
-					'lesson%s'%i: [{'id': df[(df.days_id==j)&(df.pairs_id==i)].id.values,
-									'name': df[(df.days_id==j)&(df.pairs_id==i)].name.values} for j in range(1,7)] for i in range(1,6)
+					'lesson%s'%i: [df[(df.days_id==j)&(df.pairs_id==i)].to_dict('records') for j in range(1,7)] for i in range(1,6)
 				},
 				'week2':{
-					'lesson%s'%i: [{'id': df[(df.days_id==j)&(df.pairs_id==i)].id.values,
-									'name': df[(df.days_id==j)&(df.pairs_id==i)].name.values} for j in range(7,13)] for i in range(1,6)
+					'lesson%s'%i: [df[(df.days_id==j)&(df.pairs_id==i)].to_dict('records') for j in range(7,13)] for i in range(1,6)
 				}
 		}
 		for week in data.keys():
 			for lesson in data[week].keys():
 				for k, cell in enumerate(data[week][lesson]):
-					if not cell['id'] and not cell['name']:
+
+					if not cell:
 						data[week][lesson][k] = 0
-					else:
-						data[week][lesson][k] = {'id':cell['id'][0], 'name':cell['name'][0]}
+
 		return data
 
 	def create_schedule(self):
