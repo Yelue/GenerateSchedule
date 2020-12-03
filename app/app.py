@@ -17,21 +17,14 @@ from app.tasks import load_db, prepare_random_schedule,\
 
 app = Flask(__name__)
 #need to move to config.py
-os.environ['APP_SETTINGS'] = 'config.DevelopmentConfig'
-app.config['SECRET_KEY'] = 'root'
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['UPLOAD_FOLDER'] = 'app/uploads'
+# os.environ['APP_SETTINGS'] = 'config.DevelopmentConfig'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = int(os.environ.get('SEND_FILE_MAX_AGE_DEFAULT'))
+app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')
 
 #need to add to environment variables
-username = 'wcqtmsosaglntk'
-password = '9f6497000b9a5f82fd288a15597cc09876c377b17f1b521848bc12a2f42577ef'
-database = 'dful1hqqvuc8a0'
-host = 'ec2-34-253-148-186.eu-west-1.compute.amazonaws.com'
-port = '5432'
-
-ENGINE_PATH_WIN_AUTH = f'postgres://{username}:{password}@{host}:{port}/{database}'
-app.config['SQLALCHEMY_DATABASE_URI'] = ENGINE_PATH_WIN_AUTH
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = bool(int(os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')))
 
 db = SQLAlchemy(app)
 
