@@ -40,6 +40,7 @@ class LoadFullSearchInfo:
 		del teacher
 		# return df.drop(columns=[self.column_key,'card_id', 'lesson_id', 'lesson_long_name'])
 		return df.drop(columns=['card_id','amount_time'])
+		
 	def format_data(self, df):
 		df.loc[df.lesson_type=='None','lesson_type'] = ''
 		

@@ -16,26 +16,27 @@ from db.tasks import LoadDaysTask, LoadDepartmentTask, \
 						LoadRandomStudentScheduleTask,\
 						LoadFullInfo, LoadFullSearchInfo
 from db.orm.tables import *
+import csv
 
 
 def load_db(engine):
-	LoadDaysTask.LoadDaysTask(engine=engine).load_to_db()
-	LoadFacultyTask.LoadFacultyTask(engine=engine).load_to_db()
-	LoadDepartmentTask.LoadDepartmentTask(engine=engine).load_to_db()
-	LoadGroupsTask.LoadGroupsTask(engine=engine).load_to_db()
-	LoadLessonTask.LoadLessonTask(engine=engine).load_to_db()
-	LoadTeachersTask.LoadTeachersTask(engine=engine).load_to_db()
-	LoadPairsTask.LoadPairsTask(engine=engine).load_to_db()
-	LoadCardTask.LoadCardTask(engine=engine).load_to_db()
-	LoadEmailStudents.LoadEmailStudents(engine=engine).load_to_db()
-	LoadEmailTeachers.LoadEmailTeachers(engine=engine).load_to_db()
-	
+	# LoadDaysTask.LoadDaysTask(engine=engine).load_to_db()
+	# LoadFacultyTask.LoadFacultyTask(engine=engine).load_to_db()
+	# LoadDepartmentTask.LoadDepartmentTask(engine=engine).load_to_db()
+	# LoadGroupsTask.LoadGroupsTask(engine=engine).load_to_db()
+	# LoadLessonTask.LoadLessonTask(engine=engine).load_to_db()
+	# LoadTeachersTask.LoadTeachersTask(engine=engine).load_to_db()
+	# LoadPairsTask.LoadPairsTask(engine=engine).load_to_db()
+	# LoadCardTask.LoadCardTask(engine=engine).load_to_db()
+	# LoadEmailStudents.LoadEmailStudents(engine=engine).load_to_db()
+	# LoadEmailTeachers.LoadEmailTeachers(engine=engine).load_to_db()
+	pass
 
 def prepare_random_schedule(db):
 	#prepare for teacher
-	LoadRandomTeacherScheduleTask.LoadRandomTeacherScheduleTask(db).load_to_db()
+	# LoadRandomTeacherScheduleTask.LoadRandomTeacherScheduleTask(db).load_to_db()
 	#prepare for student
-	LoadRandomStudentScheduleTask.LoadRandomStudentScheduleTask(db).load_to_db()
+	# LoadRandomStudentScheduleTask.LoadRandomStudentScheduleTask(db).load_to_db()
 
 def prepare_schedule_interface(db, user_status='student', user_key='$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6'):
 	return LoadFullInfo.LoadFullInfo(db=db, user_status=user_status, user_key=user_key).create_schedule()
@@ -87,7 +88,8 @@ def search_schedule(db, search_query):
 		#format_data
 		return 'teach', LoadFullSearchInfo.LoadFullSearchInfo(db, user_status='teacher', ids=teacher).create_schedule()
 
-
+	return False
+	
 def check_schedule(db, search_query):
 	student = find_in_student(db, search_query)
 	teacher = find_in_teacher(db, search_query)
@@ -110,6 +112,7 @@ def find_in_teacher(db, search_query):
 		return False
 	cards_id = db.session.query(Card.card_id).filter_by(teacher_id=teacher_id).all()
 	return db.session.query(Teacher_Wish_Schedule.tchr_schedule_id).filter(Teacher_Wish_Schedule.card_id.in_(cards_id)).all()
+
 
 def genetic_algorithm(db):
 
@@ -141,3 +144,24 @@ def genetic_algorithm(db):
 
 	#db.session.add_all(classesL)
 	#db.session.commit()
+
+def find_all_teachers(db):
+	return [dict((col, getattr(row, col)) for col in row.__table__.columns.keys()) for row in db.session.query(Teacher).all()]
+
+def users_load(db):
+	
+	# teachers = list(map(lambda x: x[0], db.session.query(Teacher.teacher_long_name).all()))
+	# with open('db/assets/table_verif_teachers.csv', 'w') as f:
+	# 	writer = csv.DictWriter(f, fieldnames=['name','email'], delimiter='$')
+	# 	writer.writerows([{'name':i, 'email':'teacher%s@gmail.com'%k} for k,i in enumerate(teachers)])
+
+	# groups = list(map(lambda x: x[0], db.session.query(Groups.group_name).all())) 
+	# with open('db/assets/table_verif_students.csv', 'w') as f:
+	# 	writer = csv.DictWriter(f, fieldnames=['name','email'], delimiter='$')
+	# 	data = []
+	# 	for k, i in enumerate(groups):
+	# 		for j in range(5):
+	# 			data.append({'name': i, 'email': 'student%s%s@gmail.com'%(j,k)})
+	# 	writer.writerows(data)
+	pass
+
