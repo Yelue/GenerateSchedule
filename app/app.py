@@ -32,9 +32,12 @@ db = SQLAlchemy(app)
 
 db.create_all()
 
+
+
 @app.errorhandler(404)
 def not_found(error):
-    send_messages(db)
+    # send_messages(db)
+    genetic_algorithm(db)
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 @app.route("/",  methods=['GET', 'POST'])

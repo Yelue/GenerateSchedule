@@ -160,7 +160,7 @@ def genetic_algorithm(db):
 	ppl.create_chromosomes()
 
 	ga = GeneticAlgorithm(ppl.chromosomes, clc, swc, twc)
-	ga.fit(n_iter = 3)
+	ga.fit(n_iter = 10)
 
 	classesL = []
 	TB_chromosome = ga.chromosomes[0][0]
@@ -172,7 +172,7 @@ def genetic_algorithm(db):
 			pairs_id = wdc[2] + 1
 
 			#classesL.append(Class(card_id = int(card), days_id = int(days_id), pairs_id = int(pairs_id)))
-			# print('Card_id: {}, days_id: {}, pairs_id: {}'.format(card, days_id, pairs_id))
+			print('Card_id: {}, days_id: {}, pairs_id: {}'.format(card, days_id, pairs_id))
 
 	#db.session.add_all(classesL)
 	#db.session.commit()
