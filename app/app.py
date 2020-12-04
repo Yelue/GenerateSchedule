@@ -15,26 +15,22 @@ from app.tasks import load_db, prepare_random_schedule,\
                         prepare_schedule_interface,\
                         load_schedule_db,search_schedule, \
                         check_schedule, find_all_teachers,\
-                        users_load, genetic_algorithm
+                        genetic_algorithm
+
 
 app = Flask(__name__)
 
-#need to move to config.py
-# os.environ['APP_SETTINGS'] = 'config.DevelopmentConfig'
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = int(os.environ.get('SEND_FILE_MAX_AGE_DEFAULT'))
 app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER')
 
-#need to add to environment variables
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = bool(int(os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')))
 
 db = SQLAlchemy(app)
 
 db.create_all()
-# load_db(db.engine)
-# users_load(db=db)
-# prepare_random_schedule(db=db)
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
