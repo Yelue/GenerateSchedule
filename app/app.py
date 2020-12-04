@@ -16,7 +16,7 @@ from app.tasks import load_db, prepare_random_schedule,\
                         load_schedule_db,search_schedule, \
                         check_schedule, find_all_teachers,\
                         genetic_algorithm,\
-                        send_messages
+                        send_messages, check_all_sended
 
 
 app = Flask(__name__)
@@ -49,7 +49,7 @@ def index():
 @app.route("/scheduledesign/<user_status>/<user_key>",  methods=['GET', 'POST'])
 def scheduledesign(user_status, user_key):
     temp_data = prepare_schedule_interface( 
-                                            db=db, 
+                                            db=d b, 
                                             user_status=user_status, 
                                             user_key=user_key
                                             )
@@ -70,6 +70,10 @@ def get_desired_schedule(user_status, user_key):
     data = json.loads(request.form['javascript_data'])
 
     load_schedule_db(data=data, db=db, user_status=user_status, user_key=user_key)
+    if check_all_sended(db):
+        print('gip gip')
+        # send_messages(db)
+
     return '', 200
 
 
@@ -143,7 +147,7 @@ def get_teachers():
     
     return jsonify({'teachers': teachers})
 
-@app.route('/api/schedule/<query>', methods=['GET'])
+@app.route('/api/schedule/<query>', methods=['POST','GET'])
 def get_schedule(query):
     return jsonify({'schedule': search_schedule(db,query)})
 

@@ -184,4 +184,14 @@ def genetic_algorithm(db):
 def find_all_teachers(db):
 	return [dict((col, getattr(row, col)) for col in row.__table__.columns.keys()) for row in db.session.query(Teacher).all()]
 
-
+def check_all_sended(db):
+	all_keys_wish_student = pd.read_sql('select st_secret_key from student_wish_schedule', con=db.engine).drop_duplicates(keep='first')
+	all_keys_wish_teacher = pd.read_sql('select tchr_secret_key from teacher_wish_schedule', con=db.engine).drop_duplicates(keep='first')
+	
+	teachers_keys = pd.read_sql('select tchr_secret_key from verif_teacher', con=db.engine)
+	student_keys = pd.read_sql('select st_secret_key from verif_student', con=db.engine)
+	if len(pd.concat(all_keys_wish_teacher, teachers_keys).drop_duplicates(keep=False)) and \
+		len(pd.concat(all_keys_wish_student, student_keys).drop_duplicates(keep=False)):
+		return True
+	
+	return False
