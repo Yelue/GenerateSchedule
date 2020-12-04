@@ -49,7 +49,7 @@ def index():
 @app.route("/scheduledesign/<user_status>/<user_key>",  methods=['GET', 'POST'])
 def scheduledesign(user_status, user_key):
     temp_data = prepare_schedule_interface( 
-                                            db=d b, 
+                                            db=db, 
                                             user_status=user_status, 
                                             user_key=user_key
                                             )
