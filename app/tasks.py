@@ -1,5 +1,7 @@
 import sqlalchemy
 import numpy as np
+import requests
+import os
 
 from alg.population import Population
 from alg.student_wishes import SWishesConnector
@@ -17,6 +19,16 @@ from db.tasks import LoadDaysTask, LoadDepartmentTask, \
 						LoadFullInfo, LoadFullSearchInfo
 from db.orm.tables import *
 import csv
+
+
+def send_simple_message():
+    return requests.post(
+        os.environ.get('MAIL_URL'),
+        auth=("api", os.environ.get("MAIL_API")),
+        data={"from": os.environ.get("MAIL_FROM"),
+            "to": "test <testrozklad@gmail.com>",
+            "subject": "Hello test",
+            "text": "yohoo2"})
 
 
 def load_db(engine):
@@ -80,7 +92,7 @@ def load_schedule_db(data,
 def search_schedule(db, search_query):
 	student = find_in_student(db, search_query)
 	teacher = find_in_teacher(db, search_query)
-	
+
 	if student:
 		#format_data
 		return 'stud', LoadFullSearchInfo.LoadFullSearchInfo(db, user_status='student', ids=student).create_schedule()

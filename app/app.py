@@ -15,7 +15,7 @@ from app.tasks import load_db, prepare_random_schedule,\
                         prepare_schedule_interface,\
                         load_schedule_db,search_schedule, \
                         check_schedule, find_all_teachers,\
-                        genetic_algorithm
+                        genetic_algorithm, send_simple_message
 
 
 app = Flask(__name__)
@@ -80,14 +80,14 @@ def search():
 
     s_f.search_value.data = ''
     if check_schedule(db, search_query):
-        return redirect(f'/schedule_{search_query}_w_1')
+        return redirect(f'/schedule/{search_query}/w_1')
     else:
         return render_template('search_result.html',
                                search_form=s_f,
                                search_value=search_query)
 
 
-@app.route("/schedule_<name>_w_<w_num>", methods=['GET', 'POST'])
+@app.route("/schedule/<name>/<w_num>", methods=['GET', 'POST'])
 def schedule(name, w_num):
     search_type, schedule = search_schedule(db, name)
     schedule = schedule[f'week{w_num}']
@@ -124,8 +124,7 @@ def upload_files():
             file = request.files[f]
             filename = new_name + os.path.splitext(secure_filename(file.filename))[1]
             file.save(
-                        os.path.join(app.config['UPLOAD_FOLDER'] + folder_name,
-                                        filename)
+                        os.path.join(app.config['UPLOAD_FOLDER'] + folder_name, filename)
                      )
     # load_db(db.engine)
     shutil.rmtree(app.config['UPLOAD_FOLDER'] + folder_name)
@@ -146,10 +145,15 @@ def get_schedule(query):
 
 @app.route('/api/lesson_cards/<user_status>/<user_key>', methods=['GET'])
 def lesson_cards(user_status, user_key):
-    #prepare_schedule_interface have default values
     data = prepare_schedule_interface(db=db)
 
     return jsonify({'cards': data})
+
+
+@app.route('/send_email', methods=['GET', 'POST'])
+def send_email():
+    send_simple_message()
+    return '200'
 
 if __name__ == '__main__':
     app.run()
