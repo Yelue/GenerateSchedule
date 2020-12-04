@@ -8,15 +8,7 @@ class LoadFullSearchInfo:
 		self.ids = tuple(map(lambda x: x[0], ids))
 
 	def find_card(self):
-		if self.user_status=='student':
-			table = 'student_wish_schedule'
-			self.column_key = 'st_schedule_id'
-		else:
-			table = 'teacher_wish_schedule'
-			self.column_key = 'tchr_schedule_id'
-
-		df = pd.read_sql(f"select {self.column_key},card_id,pairs_id,days_id from {table} where {self.column_key} in {self.ids}", con=self.db.engine)
-
+		df = pd.read_sql(f"select class_id,card_id,pairs_id,days_id from class where class_id in {self.ids}", con=self.db.engine)
 
 		return df
 
@@ -43,8 +35,8 @@ class LoadFullSearchInfo:
 	def format_data(self, df):
 		df.loc[df.lesson_type=='None','lesson_type'] = ''
 		
-		df.rename(columns={'st_schedule_id':'id','tchr_schedule_id':'id'}, inplace=True)
-
+		df.rename(columns={'class_id':'id'}, inplace=True)
+		df = self.format_lecture(df) if self.user_status=='teacher' else df
 		data = {
 				'week1':{
 					'lesson%s'%i: [df[(df.days_id==j)&(df.pairs_id==i)].to_dict('records') for j in range(1,7)] for i in range(1,6)
@@ -59,10 +51,21 @@ class LoadFullSearchInfo:
 
 					if not cell:
 						data[week][lesson][k] = 0
-
-
-		return data
 		
+		return data
+	
+	def format_lecture(self,df):
+		lectures = df[['pairs_id','days_id']][df[['pairs_id','days_id']].duplicated()].drop_duplicates(keep='first')
+		lectures = [list(i) for i in lectures.values]
+		data = {}
+		for i in lectures:
+			data[tuple(i)] = ', '.join(list(df[(df.pairs_id==i[0])&(df.days_id==i[1])]['group_name'].values))
+		df.drop_duplicates(subset=['pairs_id', 'days_id'], keep='first', inplace=True)
+		for i in data.keys():	
+			df.loc[(df.pairs_id==i[0])&(df.days_id==i[1]),'group_name'] = data[i]
+
+		return df
+
 	def create_schedule(self):
 		df = self.find_card()
 		df = self.full_info(df)

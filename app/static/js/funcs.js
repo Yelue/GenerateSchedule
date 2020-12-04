@@ -24,9 +24,11 @@ function save(){
         alert('Table is empty!');
     }
     else {
+        var url = String(window.location).split('/');
+        var user_status = url[4];
+        var user_key = url[5];
 
-
-        $.post( "/post_desired_schedule", {
+        $.post( "/post_desired_schedule/"+user_status+'/'+user_key, {
             'javascript_data': JSON.stringify(content)
         });
 

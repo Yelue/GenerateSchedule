@@ -31,6 +31,7 @@ db = SQLAlchemy(app)
 
 db.create_all()
 
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
@@ -44,11 +45,11 @@ def index():
 
 @app.route("/scheduledesign/<user_status>/<user_key>",  methods=['GET', 'POST'])
 def scheduledesign(user_status, user_key):
-    temp_data = prepare_schedule_interface(db=db)
-    print(temp_data)
-    #https://generateschedule.herokuapp.com/scheduledesign/teacher/'$5$rounds=535000$mVjGYNm5/iJ49mv5$O/BlazUbmN76BHcwWdXE9fwaP6yCNTvhdX7/ntMX5I2'
-    #https://generateschedule.herokuapp.com/scheduledesign/student/$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6
-    print(user_status,user_key)
+    temp_data = prepare_schedule_interface( 
+                                            db=db, 
+                                            user_status=user_status, 
+                                            user_key=user_key
+                                            )
     return render_template('schedule_design.html',
                             data=temp_data,
                             search_form=Search_form(request.form))
@@ -61,11 +62,11 @@ def schedule_files_load():
                             new_schedule_form=New_schedule_form(request.form))
 
 
-@app.route('/post_desired_schedule', methods = ['GET', 'POST'])
-def get_desired_schedule():
+@app.route('/post_desired_schedule/<user_status>/<user_key>', methods = ['GET', 'POST'])
+def get_desired_schedule(user_status, user_key):
     data = json.loads(request.form['javascript_data'])
 
-    load_schedule_db(data=data, db=db)
+    load_schedule_db(data=data, db=db, user_status=user_status, user_key=user_key)
     return '', 200
 
 
@@ -128,6 +129,7 @@ def upload_files():
                      )
     # load_db(db.engine)
     shutil.rmtree(app.config['UPLOAD_FOLDER'] + folder_name)
+    # prepare_random_schedule(db)
     return render_template('upload.html',
                             search_form=Search_form(request.form),
                             data=upload_data)
