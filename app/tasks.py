@@ -31,7 +31,7 @@ def send_messages(db):
         	data={"from": os.environ.get("MAIL_FROM"),
         		"to": "test <testrozklad@gmail.com>",
 				"subject": "Hello",
-				"text": "Email to edit schedule:%s"%urls[url]})
+				"text": "Email to edit schedule: %s"%urls[url]})
 
 def create_urls(db):
 
