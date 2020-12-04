@@ -29,9 +29,9 @@ def send_messages(db):
         	os.environ.get('MAIL_URL'),
         	auth=("api", os.environ.get("MAIL_API")),
         	data={"from": os.environ.get("MAIL_FROM"),
-	            "to": "test <testrozklad@gmail.com>",
-	            "subject": "Hello",
-	            "text": "Email to edit schedule:%s"%urls[url]})
+        		"to": "test <testrozklad@gmail.com>",
+				"subject": "Hello",
+				"text": "Email to edit schedule:%s"%urls[url]})
 
 def create_urls(db):
 
