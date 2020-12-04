@@ -1,5 +1,5 @@
 from sqlalchemy.engine import create_engine
-
+import os
 
 ENGINE_PATH_WIN_AUTH = os.environ.get('DATABASE_URL')
 
