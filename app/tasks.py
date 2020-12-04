@@ -153,12 +153,15 @@ def genetic_algorithm(db):
 	rooms = np.array(range(1, 30))
 
 	clc = CollectionCards(FACULTY_ID, db.session)
+	print('Done CLS')
 	swc = SWishesConnector(FACULTY_ID, db.session)
+	print('Done SWC')
 	twc = TWishesConnector(FACULTY_ID, db.session)
+	print('Done TWC')
 
 	ppl = Population(rooms, 100, FACULTY_ID, db.session)
 	ppl.create_chromosomes()
-
+	print('Done PPL')
 	ga = GeneticAlgorithm(ppl.chromosomes, clc, swc, twc)
 	ga.fit(n_iter = 10)
 
