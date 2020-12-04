@@ -36,7 +36,7 @@ db.create_all()
 
 @app.errorhandler(404)
 def not_found(error):
-    
+
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 @app.route("/",  methods=['GET', 'POST'])
@@ -83,7 +83,7 @@ def search():
 
     s_f.search_value.data = ''
     if check_schedule(db, search_query):
-        return redirect(f'/schedule/{search_query}/w_1')
+        return redirect(f'/schedule/{search_query}/1')
     else:
         return render_template('search_result.html',
                                search_form=s_f,
