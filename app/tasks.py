@@ -38,7 +38,7 @@ def prepare_random_schedule(db):
 	#prepare for student
 	# LoadRandomStudentScheduleTask.LoadRandomStudentScheduleTask(db).load_to_db()
 	pass 
-	
+
 def prepare_schedule_interface(db, user_status='student', user_key='$5$rounds=535000$qa5KMY9rGglSTjUc$iSsGfCyu1aHuDsM/5FYQhn/zfM1JCjueJml2kAmF6E6'):
 	return LoadFullInfo.LoadFullInfo(db=db, user_status=user_status, user_key=user_key).create_schedule()
 
@@ -104,7 +104,9 @@ def find_in_student(db, search_query):
 	except:
 		return False
 	cards_id = db.session.query(Card.card_id).filter_by(group_id=group_id).all()
+
 	return db.session.query(Student_Wish_Schedule.st_schedule_id).filter(Student_Wish_Schedule.card_id.in_(cards_id)).all()
+
 
 def find_in_teacher(db, search_query):
 	try:
@@ -112,12 +114,12 @@ def find_in_teacher(db, search_query):
 	except:
 		return False
 	cards_id = db.session.query(Card.card_id).filter_by(teacher_id=teacher_id).all()
+	
 	return db.session.query(Teacher_Wish_Schedule.tchr_schedule_id).filter(Teacher_Wish_Schedule.card_id.in_(cards_id)).all()
 
 
 def genetic_algorithm(db):
-
-
+	print('Start work of genetic_algorithm')
 	FACULTY_ID = 2
 	rooms = np.array(range(1, 30))
 
@@ -141,28 +143,13 @@ def genetic_algorithm(db):
 			pairs_id = wdc[2] + 1
 
 			#classesL.append(Class(card_id = int(card), days_id = int(days_id), pairs_id = int(pairs_id)))
-			print('Card_id: {}, days_id: {}, pairs_id: {}'.format(card, days_id, pairs_id))
+			# print('Card_id: {}, days_id: {}, pairs_id: {}'.format(card, days_id, pairs_id))
 
 	#db.session.add_all(classesL)
 	#db.session.commit()
-
+	print('genetic_algorithm done')
+	
 def find_all_teachers(db):
 	return [dict((col, getattr(row, col)) for col in row.__table__.columns.keys()) for row in db.session.query(Teacher).all()]
 
-def users_load(db):
-	
-	# teachers = list(map(lambda x: x[0], db.session.query(Teacher.teacher_long_name).all()))
-	# with open('db/assets/table_verif_teachers.csv', 'w') as f:
-	# 	writer = csv.DictWriter(f, fieldnames=['name','email'], delimiter='$')
-	# 	writer.writerows([{'name':i, 'email':'teacher%s@gmail.com'%k} for k,i in enumerate(teachers)])
-
-	# groups = list(map(lambda x: x[0], db.session.query(Groups.group_name).all())) 
-	# with open('db/assets/table_verif_students.csv', 'w') as f:
-	# 	writer = csv.DictWriter(f, fieldnames=['name','email'], delimiter='$')
-	# 	data = []
-	# 	for k, i in enumerate(groups):
-	# 		for j in range(5):
-	# 			data.append({'name': i, 'email': 'student%s%s@gmail.com'%(j,k)})
-	# 	writer.writerows(data)
-	pass
 

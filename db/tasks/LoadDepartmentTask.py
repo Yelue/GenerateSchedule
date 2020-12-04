@@ -2,6 +2,7 @@ import csv
 import pandas as pd
 from db.tasks.BasicTask import BasicTask
 
+
 class LoadDepartmentTask(BasicTask):
 	def __init__(self, engine):
 		self.engine = engine

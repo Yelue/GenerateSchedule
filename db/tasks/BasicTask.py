@@ -1,5 +1,6 @@
 import abc
 
+
 class BasicTask:
 	path_files = 'db/assets/'
 

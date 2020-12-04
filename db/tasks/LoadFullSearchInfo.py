@@ -5,7 +5,6 @@ class LoadFullSearchInfo:
 	def __init__(self, db, user_status, ids):
 		self.db = db
 		self.user_status = user_status
-		# self.user_key = user_key
 		self.ids = tuple(map(lambda x: x[0], ids))
 
 	def find_card(self):
@@ -46,8 +45,6 @@ class LoadFullSearchInfo:
 		
 		df.rename(columns={'st_schedule_id':'id','tchr_schedule_id':'id'}, inplace=True)
 
-		# (df.days_id==j)&(df.pairs_id==i)
-		# print({'lesson%s'%i: [df[(df.days_id==j)&(df.pairs_id==i)].to_dict('r') for j in range(1,7)] for i in range(1,6)})
 		data = {
 				'week1':{
 					'lesson%s'%i: [df[(df.days_id==j)&(df.pairs_id==i)].to_dict('records') for j in range(1,7)] for i in range(1,6)
@@ -65,6 +62,7 @@ class LoadFullSearchInfo:
 
 
 		return data
+		
 	def create_schedule(self):
 		df = self.find_card()
 		df = self.full_info(df)

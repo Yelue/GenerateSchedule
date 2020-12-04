@@ -1,4 +1,5 @@
 import psycopg2
+import os
 
 
 def create_tables():
@@ -9,11 +10,7 @@ def create_tables():
     conn = None
     try:
         # connect to the PostgreSQL server
-        conn = psycopg2.connect(user='wcqtmsosaglntk',
-                                password='9f6497000b9a5f82fd288a15597cc09876c377b17f1b521848bc12a2f42577ef',
-                                host='ec2-34-253-148-186.eu-west-1.compute.amazonaws.com',
-                                port='5432',
-                                database='dful1hqqvuc8a0')
+        conn = psycopg2.connect(os.environ.get('DATABASE_URL'))
         cur = conn.cursor()
         # create table one by one
 

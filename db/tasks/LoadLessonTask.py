@@ -15,5 +15,4 @@ class LoadLessonTask(BasicTask):
 
 	def load_to_db(self):
 		src = self.get_data()
-		# print(src)
 		src.to_sql('lesson', con=self.engine, if_exists='append', index=False)

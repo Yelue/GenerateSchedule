@@ -8,14 +8,14 @@ CREATE TABLE department (
     department_id SERIAL PRIMARY KEY,
     department_short_name VARCHAR(20) NOT NULL,
     department_long_name VARCHAR(100) NOT NULL,
-    faculty_id SERIAL NOT NULL REFERENCES faculty (faculty_id)
+    faculty_id INTEGER NOT NULL REFERENCES faculty (faculty_id)
 );
 
 CREATE TABLE groups (
     group_id SERIAL PRIMARY KEY,
     group_name VARCHAR(10) NOT NULL,
     group_course INTEGER NOT NULL,
-    department_id SERIAL NOT NULL REFERENCES department (department_id)
+    department_id INTEGER NOT NULL REFERENCES department (department_id)
 );
 
 CREATE TABLE teacher (
@@ -32,20 +32,16 @@ CREATE TABLE lesson (
     lesson_type VARCHAR(30) NOT NULL
 );
 
-CREATE TABLE room (
-    room_id SERIAL PRIMARY KEY,
-    room_number INTEGER NOT NULL,
-    room_type VARCHAR(100) NOT NULL
-);
-
 CREATE TABLE study_days (
-    days_id SERIAL PRIMARY KEY ,
+    days_id SERIAL PRIMARY KEY,
     name_day VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE pairs (
     pairs_id SERIAL PRIMARY KEY,
-    time_table VARCHAR(100) NOT NULL
+    start_time TIME NOT NULL,
+	end_time TIME NOT NULL,
+	CONSTRAINT valid_time CHECK(end_time > start_time)
 );
 
 CREATE TABLE card  (
@@ -53,14 +49,15 @@ CREATE TABLE card  (
     group_id INTEGER PRIMARY KEY REFERENCES groups (group_id),
     teacher_id INTEGER PRIMARY KEY REFERENCES teacher (teacher_id),
     lesson_id INTEGER PRIMARY KEY REFERENCES lesson (lesson_id),
-    amount_time INTEGER NOT NULL
+    amount_time INTEGER NOT NULL,
+	CONSTRAINT valid_amount_time CHECK(amount_time > 0 AND amount_time < 8)
 );
 
 CREATE TABLE class (
     class_id SERIAL PRIMARY KEY,
-    card_id SERIAL NOT NULL REFERENCES card (card_id),
-    days_id SERIAL NOT NULL REFERENCES study_days (days_id),
-    pairs_id SERIAL NOT NULL REFERENCES pairs (pairs_id)
+    card_id INTEGER NOT NULL REFERENCES card (card_id),
+    days_id INTEGER NOT NULL REFERENCES study_days (days_id),
+    pairs_id INTEGER NOT NULL REFERENCES pairs (pairs_id)
 );
 
 CREATE TABLE verif_student (
@@ -89,6 +86,8 @@ CREATE TABLE teacher_wish_schedule (
 	days_id INTEGER NOT NULL REFERENCES study_days (days_id),
 	pairs_id INTEGER NOT NULL REFERENCES pairs (pairs_id)
 );
+
+
 
 
 
