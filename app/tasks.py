@@ -25,7 +25,7 @@ import csv
 def send_messages(db):
 	urls = create_urls(db)
 	for url in list(urls.keys())[:1]:
-    	requests.post(
+		requests.post(
         	os.environ.get('MAIL_URL'),
         	auth=("api", os.environ.get("MAIL_API")),
         	data={"from": os.environ.get("MAIL_FROM"),
