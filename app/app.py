@@ -15,7 +15,8 @@ from app.tasks import load_db, prepare_random_schedule,\
                         prepare_schedule_interface,\
                         load_schedule_db,search_schedule, \
                         check_schedule, find_all_teachers,\
-                        genetic_algorithm, send_simple_message
+                        genetic_algorithm,\
+                        send_messages
 
 
 app = Flask(__name__)
@@ -31,9 +32,9 @@ db = SQLAlchemy(app)
 
 db.create_all()
 
-
 @app.errorhandler(404)
 def not_found(error):
+    send_messages(db)
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 @app.route("/",  methods=['GET', 'POST'])
@@ -129,6 +130,7 @@ def upload_files():
     # load_db(db.engine)
     shutil.rmtree(app.config['UPLOAD_FOLDER'] + folder_name)
     # prepare_random_schedule(db)
+    #send_messages()
     return render_template('upload.html',
                             search_form=Search_form(request.form),
                             data=upload_data)
@@ -150,10 +152,6 @@ def lesson_cards(user_status, user_key):
     return jsonify({'cards': data})
 
 
-@app.route('/send_email', methods=['GET', 'POST'])
-def send_email():
-    send_simple_message()
-    return '200'
 
 if __name__ == '__main__':
     app.run()

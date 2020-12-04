@@ -1,5 +1,6 @@
 import sqlalchemy
 import numpy as np
+import pandas as pd
 import requests
 import os
 
@@ -21,15 +22,32 @@ from db.orm.tables import *
 import csv
 
 
-def send_simple_message():
-    return requests.post(
-        os.environ.get('MAIL_URL'),
-        auth=("api", os.environ.get("MAIL_API")),
-        data={"from": os.environ.get("MAIL_FROM"),
-            "to": "test <testrozklad@gmail.com>",
-            "subject": "Hello test",
-            "text": "yohoo2"})
+def send_messages(db):
+	urls = create_urls(db)
+	for url in list(urls.keys())[:1]:
+    	requests.post(
+        	os.environ.get('MAIL_URL'),
+        	auth=("api", os.environ.get("MAIL_API")),
+        	data={"from": os.environ.get("MAIL_FROM"),
+	            "to": "test <testrozklad@gmail.com>",
+	            "subject": "Hello",
+	            "text": "Email to edit schedule:%s"%urls[url]})
 
+def create_urls(db):
+
+	st_verif_query = "select * from verif_student;"
+	tchr_verif_query = "select * from verif_teacher;"
+
+	st_verif_df = pd.read_sql(st_verif_query, con=db.engine)
+	tchr_verif_df = pd.read_sql(tchr_verif_query, con=db.engine)
+
+	st_link = 'https://generateschedule.herokuapp.com/scheduledesign/student/' + st_verif_df.st_secret_key
+	tchr_link = 'https://generateschedule.herokuapp.com/scheduledesign/teacher/' + tchr_verif_df.tchr_secret_key
+
+	verif_teacher_links = {x: y for x,y in zip(tchr_verif_df.tchr_email, tchr_link)}
+	verif_students_links = {x: y for x,y in zip(st_verif_df.st_email, st_link)}
+
+	return {**verif_students_links, **verif_teacher_links}
 
 def load_db(engine):
 	LoadDaysTask.LoadDaysTask(engine=engine).load_to_db()
