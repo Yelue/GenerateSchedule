@@ -72,6 +72,19 @@ def prepare_random_schedule(db):
 def prepare_schedule_interface(db, user_status, user_key):
 	return LoadFullInfo.LoadFullInfo(db=db, user_status=user_status, user_key=user_key).create_schedule()
 
+def check_all_sended(db):
+	all_keys_wish_student = pd.read_sql('select st_secret_key from student_wish_schedule', con=db.engine).drop_duplicates(keep='first')
+	all_keys_wish_teacher = pd.read_sql('select tchr_secret_key from teacher_wish_schedule', con=db.engine).drop_duplicates(keep='first')
+	
+	teachers_keys = pd.read_sql('select tchr_secret_key from verif_teacher', con=db.engine)
+	student_keys = pd.read_sql('select st_secret_key from verif_student', con=db.engine)
+	if len(pd.concat(all_keys_wish_teacher, teachers_keys, ignore_index=True).drop_duplicates(keep=False)) and \
+		len(pd.concat(all_keys_wish_student, student_keys, ignore_index=True).drop_duplicates(keep=False)):
+		return True
+	
+	return False
+
+
 def prepare_data_db(data, user_status, user_key):
 	data_db = []
 	if user_status=='student':
@@ -102,10 +115,10 @@ def load_schedule_db(data,
 		column_key = 'tchr_schedule_id'
 	data = prepare_data_db(data=data,user_status=user_status,user_key=user_key)
 	print(data)
-	# for d in data:
-	# 	db.session.query(table).filter_by(**{column_key:d[column_key]}).update(d)
+	for d in data:
+		db.session.query(table).filter_by(**{column_key:d[column_key]}).update(d)
 
-	# db.session.commit()
+	db.session.commit()
 
 def search_schedule(db, search_query):
 	student = find_in_student(db, search_query)
@@ -174,24 +187,13 @@ def genetic_algorithm(db):
 			days_id = (wdc[0] + 1) * wdc[1] + 1
 			pairs_id = wdc[2] + 1
 
-			#classesL.append(Class(card_id = int(card), days_id = int(days_id), pairs_id = int(pairs_id)))
+			classesL.append(Class(card_id = int(card), days_id = int(days_id), pairs_id = int(pairs_id)))
 			print('Card_id: {}, days_id: {}, pairs_id: {}'.format(card, days_id, pairs_id))
 
-	#db.session.add_all(classesL)
-	#db.session.commit()
+	db.session.add_all(classesL)
+	db.session.commit()
 	print('genetic_algorithm done')
 
 def find_all_teachers(db):
 	return [dict((col, getattr(row, col)) for col in row.__table__.columns.keys()) for row in db.session.query(Teacher).all()]
 
-def check_all_sended(db):
-	all_keys_wish_student = pd.read_sql('select st_secret_key from student_wish_schedule', con=db.engine).drop_duplicates(keep='first')
-	all_keys_wish_teacher = pd.read_sql('select tchr_secret_key from teacher_wish_schedule', con=db.engine).drop_duplicates(keep='first')
-	
-	teachers_keys = pd.read_sql('select tchr_secret_key from verif_teacher', con=db.engine)
-	student_keys = pd.read_sql('select st_secret_key from verif_student', con=db.engine)
-	if len(pd.concat(all_keys_wish_teacher, teachers_keys).drop_duplicates(keep=False)) and \
-		len(pd.concat(all_keys_wish_student, student_keys).drop_duplicates(keep=False)):
-		return True
-	
-	return False

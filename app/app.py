@@ -71,8 +71,7 @@ def get_desired_schedule(user_status, user_key):
 
     load_schedule_db(data=data, db=db, user_status=user_status, user_key=user_key)
     if check_all_sended(db):
-        print('gip gip')
-        # send_messages(db)
+        send_messages(db)
 
     return '', 200
 
@@ -133,10 +132,10 @@ def upload_files():
             file.save(
                         os.path.join(app.config['UPLOAD_FOLDER'] + folder_name, filename)
                      )
-    # load_db(db.engine)
+    load_db(db.engine)
     shutil.rmtree(app.config['UPLOAD_FOLDER'] + folder_name)
-    # prepare_random_schedule(db)
-    #send_messages()
+    prepare_random_schedule(db)
+    
     return render_template('upload.html',
                             search_form=Search_form(request.form),
                             data=upload_data)
